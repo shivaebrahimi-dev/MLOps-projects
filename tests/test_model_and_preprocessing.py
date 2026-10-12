@@ -1,3 +1,4 @@
+import pytest
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader, TensorDataset
@@ -39,6 +40,37 @@ def test_preprocess_matches_training_path():
     pixels = torch.randint(0, 256, (28, 28), dtype=torch.uint8)
     image = Image.fromarray(pixels.numpy(), mode="L")
     assert torch.equal(preprocess_image(image)[0], to_model_input(pixels))
+
+
+def photo_of_dark_item(background=255) -> Image.Image:
+    """A 200x300 colour 'product photo': dark square, off-centre, on a light background."""
+    photo = Image.new("RGB", (200, 300), color=(background,) * 3)
+    photo.paste((20, 20, 20), (30, 150, 110, 230))
+    return photo
+
+
+@pytest.mark.parametrize("background", [255, 210])
+def test_photo_is_converted_to_fashion_mnist_layout(background):
+    """Light background becomes black and the item is negated, cropped and centred."""
+    out = preprocess_image(photo_of_dark_item(background))[0, 0]
+    black = -FASHION_MNIST_MEAN / FASHION_MNIST_STD
+    assert out.shape == (28, 28)
+    assert out.mean() > 1.5  # the item now fills the frame as bright pixels
+    assert out.min() > black + 1.0  # with no dark margin left around it
+
+
+def test_dark_background_image_is_not_negated():
+    image = Image.new("L", (140, 140), color=0)
+    image.paste(255, (40, 40, 100, 100))
+    out = preprocess_image(image)[0, 0]
+    assert out[14, 14] > 0
+
+
+def test_transparent_background_is_treated_as_white():
+    image = Image.new("RGBA", (100, 100), color=(0, 0, 0, 0))
+    image.paste((30, 30, 30, 255), (20, 20, 80, 80))
+    out = preprocess_image(image)[0, 0]
+    assert out[14, 14] > 0
 
 
 def test_split_is_disjoint_complete_and_reproducible():

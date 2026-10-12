@@ -253,7 +253,12 @@ Response:
 }
 ```
 
-The image is converted to grayscale, resized to 28 × 28 and normalised by the same function the training data goes through ([preprocessing.py](src/fashion_mlops/preprocessing.py)), so inference input always matches training input.
+Preprocessing ([preprocessing.py](src/fashion_mlops/preprocessing.py)) keeps inference input consistent with training input:
+
+- A 28 × 28 image is treated as Fashion-MNIST format and goes through exactly the same normalisation function as the training data.
+- Any other image is first brought into that format the way the dataset itself was built from product photos: converted to grayscale, negated if its background is light, cropped to the item, and centred in a 28 × 28 black frame. Then it is normalised by the same function.
+
+On 1,000 test images re-rendered as off-centre items on a white background, this second step raises accuracy from 31% (plain resize) to 90%, the same as on the original images.
 
 | Status | When |
 |---|---|
@@ -276,7 +281,7 @@ Open <http://localhost:8501>.
 
 The sidebar shows whether the API is reachable and which model it is serving. The UI never runs the model itself; every prediction is a request to the FastAPI service.
 
-Fashion-MNIST images show a light item on a black background, so the model works best on images in that style. An ordinary product photo on a white background is outside what it was trained on and may be misclassified.
+Photos of your own work best when they resemble a catalogue shot: one item, laid flat or on a plain mannequin, on a plain white or light background. The API converts such photos into Fashion-MNIST format automatically. Photos with a busy background, a person wearing the item, several items, or a white item on a white background are outside what the model was trained on and are often misclassified; so are kinds of clothing that are not among the ten classes.
 
 ## Running without Docker
 
