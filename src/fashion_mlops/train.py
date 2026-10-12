@@ -6,16 +6,19 @@ import argparse
 import copy
 import logging
 import random
+import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
+import httpx
+import mlflow
 import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.utils.data import DataLoader
 
-from fashion_mlops.config import TrainConfig, load_train_config
+from fashion_mlops.config import ServiceSettings, TrainConfig, load_train_config
 from fashion_mlops.data import make_loaders
 from fashion_mlops.model import LeNet5
 
@@ -150,16 +153,67 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def check_mlflow_reachable(tracking_uri: str) -> None:
+    """Fail fast with a clear message instead of waiting through MLflow's long retries."""
+    if not tracking_uri.startswith("http"):
+        return
+    try:
+        httpx.get(tracking_uri.rstrip("/") + "/health", timeout=5).raise_for_status()
+    except httpx.HTTPError as exc:
+        raise RuntimeError(
+            f"MLflow tracking server is not reachable at {tracking_uri} ({exc}). "
+            "Start it with `docker compose up -d mlflow` or set MLFLOW_TRACKING_URI."
+        ) from exc
+
+
+def run_training(config: TrainConfig, settings: ServiceSettings) -> str:
+    """Run one tracked training run and return its MLflow run ID.
+
+    Any exception inside the ``with`` block marks the MLflow run as FAILED.
+    """
+    check_mlflow_reachable(settings.mlflow_tracking_uri)
+    mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
+    mlflow.set_experiment(config.experiment_name)
+
+    with mlflow.start_run() as run:
+        run_id = run.info.run_id
+        logger.info("MLflow run %s in experiment '%s'", run_id, config.experiment_name)
+        # The resolved configuration is logged twice: as searchable params and as one
+        # file that can be fed straight back in to reproduce the run.
+        mlflow.log_params(config.model_dump())
+        mlflow.log_dict({"training": config.model_dump()}, "config.json")
+
+        set_seed(config.seed)
+        train_loader, val_loader = make_loaders(config)
+        result = train_model(
+            config,
+            train_loader,
+            val_loader,
+            on_epoch_end=lambda epoch, metrics: mlflow.log_metrics(metrics, step=epoch),
+        )
+
+        mlflow.log_metrics(
+            {
+                "final_val_accuracy": result.final_metrics["val_accuracy"],
+                "final_val_loss": result.final_metrics["val_loss"],
+                "epochs_run": result.epochs_run,
+            }
+        )
+        logger.info("final validation accuracy: %.4f", result.final_metrics["val_accuracy"])
+    return run_id
+
+
 def main(argv: list[str] | None = None) -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     args = vars(parse_args(argv))
     config = load_train_config(args.pop("config"), overrides=args)
     logger.info("training configuration: %s", config.model_dump())
 
-    set_seed(config.seed)
-    train_loader, val_loader = make_loaders(config)
-    result = train_model(config, train_loader, val_loader)
-    logger.info("final validation accuracy: %.4f", result.final_metrics["val_accuracy"])
+    try:
+        run_training(config, ServiceSettings())
+    except Exception:
+        logger.exception("training run FAILED")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
