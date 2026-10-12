@@ -1,6 +1,81 @@
 name: fashion-mlops
 
+# Startup sequence (see README):
+#   docker compose up -d minio mlflow webhook-receiver
+#   docker compose run --rm trainer
+#   docker compose up -d api ui
+
+# MinIO connection shared by the trainer and the API. Inside the Compose network
+# MinIO is reached by service name; credentials come from .env.
+x-minio-env: &minio-env
+  MINIO_ENDPOINT: minio:9000
+  MINIO_SECURE: "false"
+  MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:?Set MINIO_ACCESS_KEY in .env (copy .env.example)}
+  MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?Set MINIO_SECRET_KEY in .env (copy .env.example)}
+  MINIO_BUCKET: ${MINIO_BUCKET:-fashion-minst-bucket}
+
 services:
+  # One-shot training job. The "train" profile keeps it out of a plain `docker compose up`.
+  #   docker compose run --rm trainer
+  #   docker compose run --rm trainer --config configs/train.toml --epochs 10
+  trainer:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    image: fashion-mlops-app
+    profiles: ["train"]
+    entrypoint: ["fashion-train"]
+    command: ["--config", "configs/train.toml"]
+    environment:
+      <<: *minio-env
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      WEBHOOK_URL: ${TRAINER_WEBHOOK_URL:-http://webhook-receiver:8080/webhook}
+      GIT_PYTHON_REFRESH: quiet # the image has no git; stops MLflow warning about it
+    volumes:
+      - ./configs:/app/configs:ro # edit the config without rebuilding the image
+      - dataset:/app/data # downloaded Fashion-MNIST is reused between runs
+    depends_on:
+      minio:
+        condition: service_healthy
+      mlflow:
+        condition: service_healthy
+      webhook-receiver:
+        condition: service_started
+
+  # FastAPI prediction backend: loads the selected model from MinIO.
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    image: fashion-mlops-app
+    environment:
+      <<: *minio-env
+      MODEL_OBJECT_KEY: ${MODEL_OBJECT_KEY:-}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  # Streamlit UI: talks only to the API.
+  ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ui
+    image: fashion-mlops-ui
+    environment:
+      API_URL: http://api:8000
+    ports:
+      - "${UI_PORT:-8501}:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+
   # S3-compatible object storage for trained models.
   # MinIO no longer publishes minio/minio on Docker Hub, so this uses the Chainguard build.
   minio:
@@ -50,5 +125,6 @@ services:
       - "${WEBHOOK_PORT:-8090}:8080"
 
 volumes:
+  dataset:
   minio-data:
   mlflow-data:

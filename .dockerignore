@@ -1,0 +1,13 @@
+# Keep secrets, local data and the host virtualenv out of the images.
+.env
+.git
+.venv
+data
+mlruns
+mlartifacts
+tests
+samples
+**/__pycache__
+.pytest_cache
+*.md
+!README.md
