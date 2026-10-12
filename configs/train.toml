@@ -1,0 +1,23 @@
+# Example training configuration.
+#
+# Precedence (highest first): command-line flags, TRAIN_* environment variables,
+# this file, built-in defaults. For example, all of these set the epoch count:
+#   fashion-train --config configs/train.toml --epochs 10
+#   TRAIN_EPOCHS=10 fashion-train --config configs/train.toml
+
+[training]
+epochs = 5
+batch_size = 64
+learning_rate = 0.001
+optimizer = "adam"          # "adam" or "sgd"
+loss = "cross_entropy"      # "cross_entropy" or "nll"
+seed = 42
+val_split = 0.1             # fraction of the 60,000 training images held out for validation
+
+# Optional settings
+momentum = 0.9              # only used by sgd
+weight_decay = 0.0
+early_stopping_patience = 0 # stop after this many epochs without val-loss improvement; 0 disables
+num_workers = 0             # DataLoader worker processes
+data_dir = "data"           # where Fashion-MNIST is downloaded
+experiment_name = "fashion-mnist-lenet5"
