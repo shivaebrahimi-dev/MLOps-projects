@@ -1,0 +1,17 @@
+{
+  "event": "training_complete",
+  "status": "success",
+  "run_id": "ed7d742923e94018ab792193064917ba",
+  "experiment": "fashion-mnist-lenet5",
+  "model": {
+    "bucket": "fashion-minst-bucket",
+    "object_key": "model/ed7d742923e94018ab792193064917ba/model.pt",
+    "uri": "s3://fashion-minst-bucket/model/ed7d742923e94018ab792193064917ba/model.pt"
+  },
+  "metrics": {
+    "val_accuracy": 0.8735,
+    "val_loss": 0.33607731509208677,
+    "epochs_run": 2
+  },
+  "timestamp": "2026-10-12T17:58:43+00:00"
+}

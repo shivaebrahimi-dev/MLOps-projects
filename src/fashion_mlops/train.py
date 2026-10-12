@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import logging
 import random
 import sys
@@ -18,9 +19,11 @@ import torch.nn.functional as F
 from torch import nn
 from torch.utils.data import DataLoader
 
+from fashion_mlops import storage
 from fashion_mlops.config import ServiceSettings, TrainConfig, load_train_config
 from fashion_mlops.data import make_loaders
-from fashion_mlops.model import LeNet5
+from fashion_mlops.model import CLASS_NAMES, LeNet5, serialize_model
+from fashion_mlops.webhook import WebhookError, build_payload, send_webhook
 
 logger = logging.getLogger("fashion_mlops.train")
 
@@ -167,11 +170,18 @@ def check_mlflow_reachable(tracking_uri: str) -> None:
 
 
 def run_training(config: TrainConfig, settings: ServiceSettings) -> str:
-    """Run one tracked training run and return its MLflow run ID.
+    """Train, log to MLflow, upload to MinIO, then notify. Returns the MLflow run ID.
 
-    Any exception inside the ``with`` block marks the MLflow run as FAILED.
+    The order is the contract: the webhook is sent only after the ``with`` block has
+    finished without error, i.e. after training, MLflow logging and the MinIO upload
+    all succeeded. Any exception inside the block marks the MLflow run as FAILED and
+    propagates, so no success notification can be sent for a failed run.
     """
     check_mlflow_reachable(settings.mlflow_tracking_uri)
+    # Checked before training so a storage problem is reported in seconds, not after the run.
+    minio_client = storage.make_client(settings)
+    storage.ensure_bucket(minio_client, settings)
+
     mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
     mlflow.set_experiment(config.experiment_name)
 
@@ -200,17 +210,86 @@ def run_training(config: TrainConfig, settings: ServiceSettings) -> str:
             }
         )
         logger.info("final validation accuracy: %.4f", result.final_metrics["val_accuracy"])
+
+        model_bytes = serialize_model(result.model)
+        object_key = storage.upload_model(
+            minio_client,
+            settings,
+            run_id,
+            model_bytes,
+            info={"val_accuracy": result.final_metrics["val_accuracy"]},
+        )
+        logger.info("model uploaded to s3://%s/%s", settings.minio_bucket, object_key)
+
+        # MLflow keeps a reference to the MinIO object rather than a second copy of the model.
+        mlflow.set_tags({"model_bucket": settings.minio_bucket, "model_object_key": object_key})
+        mlflow.log_dict(
+            {
+                "run_id": run_id,
+                "bucket": settings.minio_bucket,
+                "object_key": object_key,
+                "uri": f"s3://{settings.minio_bucket}/{object_key}",
+                "size_bytes": len(model_bytes),
+                "sha256": hashlib.sha256(model_bytes).hexdigest(),
+                "architecture": "LeNet5",
+                "class_names": CLASS_NAMES,
+                "val_accuracy": result.final_metrics["val_accuracy"],
+            },
+            "model_info.json",
+        )
+
+    notify(config, settings, run_id, object_key, result)
     return run_id
+
+
+def notify(
+    config: TrainConfig,
+    settings: ServiceSettings,
+    run_id: str,
+    object_key: str,
+    result: TrainResult,
+) -> None:
+    """Send the training-complete webhook and record on the run whether it was delivered."""
+    if not settings.webhook_url:
+        logger.warning("WEBHOOK_URL is not set; skipping the training-complete notification")
+        mlflow.MlflowClient().set_tag(run_id, "webhook_status", "skipped")
+        return
+
+    payload = build_payload(
+        run_id=run_id,
+        experiment=config.experiment_name,
+        bucket=settings.minio_bucket,
+        object_key=object_key,
+        val_accuracy=result.final_metrics["val_accuracy"],
+        val_loss=result.final_metrics["val_loss"],
+        epochs_run=result.epochs_run,
+    )
+    try:
+        send_webhook(settings.webhook_url, payload)
+    except WebhookError:
+        mlflow.MlflowClient().set_tag(run_id, "webhook_status", "failed")
+        logger.error(
+            "the model was trained and stored (run %s, %s) but the notification was NOT delivered",
+            run_id, object_key,
+        )
+        raise
+    mlflow.MlflowClient().set_tag(run_id, "webhook_status", "sent")
+    logger.info("training-complete webhook sent to %s", settings.webhook_url)
 
 
 def main(argv: list[str] | None = None) -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    logging.getLogger("httpx").setLevel(logging.WARNING)
     args = vars(parse_args(argv))
     config = load_train_config(args.pop("config"), overrides=args)
     logger.info("training configuration: %s", config.model_dump())
 
     try:
         run_training(config, ServiceSettings())
+    except WebhookError as exc:
+        # notify() has already logged that the model itself is safely stored.
+        logger.error("%s", exc)
+        sys.exit(2)
     except Exception:
         logger.exception("training run FAILED")
         sys.exit(1)

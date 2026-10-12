@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import io
+
 import torch
 from torch import nn
 
@@ -49,3 +51,19 @@ class LeNet5(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Return raw class scores (logits) of shape (batch, num_classes)."""
         return self.classifier(self.features(x))
+
+
+def serialize_model(model: LeNet5) -> bytes:
+    """Serialise the weights (not the pickled class) so loading stays safe and portable."""
+    buffer = io.BytesIO()
+    torch.save({"state_dict": model.state_dict(), "class_names": CLASS_NAMES}, buffer)
+    return buffer.getvalue()
+
+
+def deserialize_model(data: bytes) -> LeNet5:
+    """Rebuild a LeNet5 in eval mode from ``serialize_model`` output."""
+    # weights_only=True refuses arbitrary pickled objects, so a tampered file cannot run code.
+    checkpoint = torch.load(io.BytesIO(data), map_location="cpu", weights_only=True)
+    model = LeNet5(num_classes=len(checkpoint["class_names"]))
+    model.load_state_dict(checkpoint["state_dict"])
+    return model.eval()
