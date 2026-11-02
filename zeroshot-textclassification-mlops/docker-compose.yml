@@ -25,5 +25,31 @@ services:
       minio:
         condition: service_healthy
 
+  # Optional. Start it with: docker compose --profile app up -d --build
+  app:
+    profiles: ["app"]
+    build: .
+    ports:
+      - "127.0.0.1:8501:8501"
+    environment:
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+      MINIO_SECURE: "false"
+      MINIO_BUCKET: ${MINIO_BUCKET:-zeroshot-learning-output}
+      MODEL_DIR: /app/models
+      HF_HOME: /app/.cache/huggingface
+      HF_TOKEN: ${HF_TOKEN:-}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
+    volumes:
+      - app_models:/app/models
+      - app_cache:/app/.cache
+      - ./configs:/app/configs
+    depends_on:
+      minio:
+        condition: service_healthy
+
 volumes:
   minio_data:
+  app_models:
+  app_cache:

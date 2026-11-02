@@ -156,10 +156,10 @@ test-first development, so each test task may be completed alongside its impleme
 
 ### Implementation for User Story 5
 
-- [ ] T043 [P] [US5] Create `Dockerfile` for the app with Python 3.12 and pinned dependencies, and add it to `docker-compose.yml` under an opt-in `app` profile with `MINIO_ENDPOINT=minio:9000`
+- [x] T043 [P] [US5] Create `Dockerfile` for the app with Python 3.12 and pinned dependencies, and add it to `docker-compose.yml` under an opt-in `app` profile with `MINIO_ENDPOINT=minio:9000`
 - [ ] T044 [US5] Create `.github/workflows/zeroshot-ci.yml` at the repository root, filtered to `zeroshot-textclassification-mlops/**`, running from that folder with CPU-only PyTorch, a MinIO service container, ruff, unit tests, and integration tests that fail instead of skipping
-- [ ] T045 [US5] Write `README.md` covering every item in the assignment's README notice: purpose, architecture, code structure, module responsibilities, models, model and cache workflow, labels, bucket and output format, prerequisites, environment variables, quick start, MinIO and Streamlit startup, downloading a model, classifying, verifying in MinIO, tests, troubleshooting, and security limitations
-- [ ] T046 [US5] Disclose the project's departures from the assignment in `README.md`: the bucket name (DR-001), MinIO image (DR-003), `TRANSFORMERS_CACHE`, CI location, `spec.md` file name, and use of Claude Code instead of GitHub Copilot, and explain why Clear Cache may find little to remove
+- [x] T045 [US5] Write `README.md` covering every item in the assignment's README notice: purpose, architecture, code structure, module responsibilities, models, model and cache workflow, labels, bucket and output format, prerequisites, environment variables, quick start, MinIO and Streamlit startup, downloading a model, classifying, verifying in MinIO, tests, troubleshooting, and security limitations
+- [x] T046 [US5] Disclose the project's departures from the assignment in `README.md`: the bucket name (DR-001), MinIO image (DR-003), `TRANSFORMERS_CACHE`, CI location, `spec.md` file name, and use of Claude Code instead of GitHub Copilot, and explain why Clear Cache may find little to remove
 
 **Checkpoint**: All user stories work, and CI passes on GitHub
 

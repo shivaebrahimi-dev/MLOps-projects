@@ -1,0 +1,65 @@
+# GitHub only runs workflows from the repository root, so this file lives here
+# rather than inside the project folder.
+name: Zero-shot platform CI
+
+on:
+  push:
+    paths:
+      - "zeroshot-textclassification-mlops/**"
+      - ".github/workflows/zeroshot-ci.yml"
+  pull_request:
+    paths:
+      - "zeroshot-textclassification-mlops/**"
+      - ".github/workflows/zeroshot-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: zeroshot-textclassification-mlops
+
+    services:
+      minio:
+        image: bitnamilegacy/minio:2025.7.23-debian-12-r5
+        ports:
+          - 9000:9000
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+        options: >-
+          --health-cmd "curl -fsS http://localhost:9000/minio/health/live"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+
+    env:
+      MINIO_ENDPOINT: localhost:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      REQUIRE_MINIO: "true"
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies with CPU-only PyTorch
+        run: pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
+
+      - name: Check lint and formatting
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Run unit tests
+        run: pytest -m "not integration"
+
+      - name: Run integration tests
+        run: pytest -m integration
