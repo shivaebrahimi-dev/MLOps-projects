@@ -13,6 +13,11 @@ extend-exclude = [".specify", ".claude", "specs"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 
+[tool.ruff.lint.per-file-ignores]
+# Pages add the project root to the import path before importing the app.
+"app/streamlit_app.py" = ["E402"]
+"app/pages/*.py" = ["E402"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]

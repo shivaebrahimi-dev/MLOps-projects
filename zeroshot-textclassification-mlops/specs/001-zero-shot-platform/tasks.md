@@ -46,17 +46,17 @@ test-first development, so each test task may be completed alongside its impleme
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T010 [P] Implement typed errors with safe user-facing messages in `app/utils/errors.py`
-- [ ] T011 [P] Implement structured JSON logging in `app/utils/logging_config.py`, excluding credentials and tokens, with a default that omits input text
-- [ ] T012 Implement settings in `app/utils/config.py` that load `.env` once before Hugging Face libraries are imported, apply the defaults in the configuration contract, name missing required variables, and keep secrets out of their text representation
-- [ ] T013 Implement model configuration loading and read-only status in `app/services/model_manager.py`, enforcing "Required and unique. Hugging Face format `org/name`, with no `..`, absolute paths, or backslashes", reporting `not_downloaded`, `downloading`, `ready`, or `failed`, and requiring "both the final folder and a valid completion marker" for `ready`
-- [ ] T014 Implement label-set loading and validation in `app/services/label_manager.py`: names "unique after trimming, ignoring case", and labels "At least 2 labels. Each is trimmed and non-empty. No case-insensitive duplicates."
-- [ ] T015 Implement shared service instances with `st.cache_resource` in `app/ui_state.py`
-- [ ] T016 Create the home page and navigation in `app/streamlit_app.py`
-- [ ] T017 [P] Add unit tests for settings, safe errors, and log redaction in `tests/unit/test_config.py`
-- [ ] T018 [P] Add unit tests for model configuration loading, missing-model detection, safe paths, and readiness rules in `tests/unit/test_model_manager.py`
-- [ ] T019 [P] Add unit tests for label validation, including case-only duplicates, in `tests/unit/test_label_manager.py`
-- [ ] T020 [P] Add an architecture test in `tests/unit/test_architecture.py` proving that nothing in `app/services/` or `app/utils/` imports Streamlit
+- [x] T010 [P] Implement typed errors with safe user-facing messages in `app/utils/errors.py`
+- [x] T011 [P] Implement structured JSON logging in `app/utils/logging_config.py`, excluding credentials and tokens, with a default that omits input text
+- [x] T012 Implement settings in `app/utils/config.py` that load `.env` once before Hugging Face libraries are imported, apply the defaults in the configuration contract, name missing required variables, and keep secrets out of their text representation
+- [x] T013 Implement model configuration loading and read-only status in `app/services/model_manager.py`, enforcing "Required and unique. Hugging Face format `org/name`, with no `..`, absolute paths, or backslashes", reporting `not_downloaded`, `downloading`, `ready`, or `failed`, and requiring "both the final folder and a valid completion marker" for `ready`
+- [x] T014 Implement label-set loading and validation in `app/services/label_manager.py`: names "unique after trimming, ignoring case", and labels "At least 2 labels. Each is trimmed and non-empty. No case-insensitive duplicates."
+- [x] T015 Implement shared service instances with `st.cache_resource` in `app/ui_state.py`
+- [x] T016 Create the home page and navigation in `app/streamlit_app.py`
+- [x] T017 [P] Add unit tests for settings, safe errors, and log redaction in `tests/unit/test_config.py`
+- [x] T018 [P] Add unit tests for model configuration loading, missing-model detection, safe paths, and readiness rules in `tests/unit/test_model_manager.py`
+- [x] T019 [P] Add unit tests for label validation, including case-only duplicates, in `tests/unit/test_label_manager.py`
+- [x] T020 [P] Add an architecture test in `tests/unit/test_architecture.py` proving that nothing in `app/services/` or `app/utils/` imports Streamlit
 
 **Checkpoint**: Foundation ready, and the app opens with an empty home page
 

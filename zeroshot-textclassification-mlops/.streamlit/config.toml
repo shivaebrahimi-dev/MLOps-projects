@@ -1,0 +1,6 @@
+[server]
+# The admin page has no login, so accept connections from this computer only.
+address = "localhost"
+
+[browser]
+gatherUsageStats = false
