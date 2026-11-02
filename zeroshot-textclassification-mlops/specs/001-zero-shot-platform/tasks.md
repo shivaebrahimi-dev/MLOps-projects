@@ -171,7 +171,7 @@ test-first development, so each test task may be completed alongside its impleme
 
 - [x] T047 Run ruff and the full test suite, and fix any failures across `app/` and `tests/`
 - [x] T048 Run every scenario in `specs/001-zero-shot-platform/quickstart.md` with both real models, measure SC-002, SC-005, and SC-008, and record the results in `specs/001-zero-shot-platform/research.md`
-- [ ] T049 Rehearse the assignment's section 13 demonstration from start to finish, using `README.md` only, and fix any step that fails
+- [x] T049 Rehearse the assignment's section 13 demonstration from start to finish, using `README.md` only, and fix any step that fails
 - [x] T050 Check `README.md` against the final code and the assignment's section 11 acceptance criteria, and run `/speckit-analyze` to check that the Spec Kit documents agree
 - [x] T051 Remove the Sync Impact Report comment from `.specify/memory/constitution.md`
 - [x] T052 Before the final push, confirm that Git tracks no secrets, `.env` files, model files, or cache directories, and that no tracked file contains personal names or email addresses of course staff
