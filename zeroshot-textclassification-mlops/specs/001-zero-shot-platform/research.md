@@ -77,8 +77,24 @@ Findings were checked on 2026-11-01. "Tested" means the check was run in an isol
 - **Rationale**: Tested without it: the DeBERTa and BART tokenizers both load at their pinned revisions and
   tokenize text. The real DeBERTa model also downloaded (38 seconds, 380 MB on disk) and classified four sample
   sentences correctly on CPU, in about 5 seconds for the first request and 1.6 seconds afterward.
-- **Not yet tested**: Full inference with BART, whose weights are 1.63 GB. If it needs another tokenizer
-  dependency, DR-002 already allows it.
+- **BART**: Tested without it too: the real model downloaded and classified the same sentences correctly.
+
+## R11. Measured results (T048)
+
+Measured on 2026-11-01 from a fresh clone on CPU-only Windows 11, driving the real pages with Streamlit's test
+harness, both real models, and running MinIO.
+
+| Measure | Target | Result |
+|---|---|---|
+| Install from `requirements.txt` | None | 85 seconds, with some packages already cached by pip |
+| DeBERTa download | None | 33 to 38 seconds, 380 MB on disk |
+| BART download | None | 102 to 112 seconds, about 1.63 GB on disk |
+| SC-002: repeat request for a ready model | Under 5 seconds | 0.01 seconds, with no files transferred |
+| SC-005: submitted text to ranked results | Under 1 minute | DeBERTa: about 8 seconds at first, then 2 to 3. BART: 1.6 seconds at first, then 0.6 |
+| Sample sentences classified as expected | None | 4 of 4 with each model |
+| SC-008: new developer's first stored prediction | Under 30 minutes | Not measured with a person. The command steps took about 3 minutes |
+
+A real browser session was not part of this measurement. It is covered by the section 13 rehearsal (T049).
 
 ## R7. PyTorch backend enforcement
 

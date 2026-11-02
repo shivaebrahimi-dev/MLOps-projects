@@ -23,7 +23,7 @@ Shows a notice that the page is intended only for local development or trusted e
 | Input | Text area | Shows the character limit. Text is displayed as plain text only. |
 | Selection | Ready-model selector and label-set selector | When none are available, shows what is missing and points to the admin page. |
 | Submit | Classify button | Shows progress while running. |
-| Result | Predicted class, confidence, ranked table, model, revision, timestamp, and request ID | Scores are rounded to two decimals for display. |
+| Result | Input text, predicted class, confidence, ranked table, model, revision, timestamp, and request ID | Scores are rounded to two decimals for display. |
 | Storage | Success or error message | On success, shows the bucket and object path. On failure, shows the result with a "not saved" error and the request ID. |
 
 ## Error messages

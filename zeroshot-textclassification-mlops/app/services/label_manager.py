@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 import tempfile
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -15,6 +16,7 @@ from app.utils.logging_config import log_event
 logger = logging.getLogger(__name__)
 
 MINIMUM_LABELS = 2
+_CONTROL_CHARACTERS = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 
 
 @dataclass(frozen=True)
@@ -23,12 +25,17 @@ class LabelSet:
     labels: tuple[str, ...]
 
 
+def sanitize_text(value: object) -> str:
+    """Trim text and remove control characters, keeping tabs and line breaks."""
+    return _CONTROL_CHARACTERS.sub("", value).strip() if isinstance(value, str) else ""
+
+
 def validate_labels(labels: Iterable[object]) -> tuple[str, ...]:
-    """Trim labels and reject empty values, duplicates, and sets that are too small."""
+    """Clean labels and reject empty values, duplicates, and sets that are too small."""
     cleaned: list[str] = []
     seen: set[str] = set()
     for label in labels:
-        text = label.strip() if isinstance(label, str) else ""
+        text = sanitize_text(label)
         if not text:
             raise LabelValidationError("Labels cannot be empty.")
         if text.casefold() in seen:
@@ -42,7 +49,7 @@ def validate_labels(labels: Iterable[object]) -> tuple[str, ...]:
 
 def add_label(labels: Iterable[str], new_label: object) -> tuple[str, ...]:
     """Return the labels with one more, for a set that may still be too small to save."""
-    text = new_label.strip() if isinstance(new_label, str) else ""
+    text = sanitize_text(new_label)
     if not text:
         raise LabelValidationError("Labels cannot be empty.")
     current = tuple(labels)

@@ -15,6 +15,10 @@ def test_labels_are_trimmed():
     assert validate_labels(["  sports ", "finance"]) == ("sports", "finance")
 
 
+def test_control_characters_are_removed_from_labels():
+    assert validate_labels(["spo\x00rts", "fin\x1bance"]) == ("sports", "finance")
+
+
 @pytest.mark.parametrize(
     ("labels", "message"),
     [

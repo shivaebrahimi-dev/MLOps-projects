@@ -157,9 +157,9 @@ A developer new to the project follows the repository's documentation to start t
 **Classification**
 
 - **FR-017**: Users MUST be able to enter or paste text, select a ready model, select a label set, and submit the text for classification.
-- **FR-018**: The system MUST display the predicted class, confidence score, all labels ranked by descending score, the model used, and the prediction timestamp.
+- **FR-018**: The system MUST display the input text, predicted class, confidence score, all labels ranked by descending score, the model used, and the prediction timestamp.
 - **FR-019**: The predicted class MUST be the highest-scoring label.
-- **FR-020**: The system MUST reject empty text and text above the documented maximum length, and MUST treat input text as plain text rather than as executable or formatted content.
+- **FR-020**: The system MUST remove control characters from input, reject empty text and text above the documented maximum length, and MUST treat input text as plain text rather than as executable or formatted content.
 - **FR-021**: The system MUST show a clear message when no ready model or valid label set is available.
 - **FR-022**: The administrator and classification workflows MUST be separate pages.
 

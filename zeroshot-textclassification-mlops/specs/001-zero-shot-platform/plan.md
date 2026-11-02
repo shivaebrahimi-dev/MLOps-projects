@@ -146,7 +146,7 @@ starts, and secrets are excluded from their text representation.
 | Unit | `tests/unit/` | Spec NFR-006 to NFR-008, config, labels, and architecture rules, using fakes and mocks |
 | Integration | `tests/integration/` | Bucket creation, stored JSON, paths, and connection failures, against running MinIO |
 | End-to-end | `tests/integration/test_end_to_end.py` | Classifier with a tiny test model through to a stored record |
-| Page smoke | `tests/unit/test_pages.py` | Pages load with Streamlit's `AppTest`, using fake services |
+| Page smoke | `tests/unit/test_home_page.py`, `test_admin_page.py`, `test_classify_page.py` | Pages work with Streamlit's `AppTest`, using fake services |
 | Manual | [quickstart.md](quickstart.md) | Real models and the assignment's demonstration |
 
 Integration tests carry the `integration` marker. They skip with a clear reason if MinIO is unreachable locally, and CI

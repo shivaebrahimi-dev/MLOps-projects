@@ -74,7 +74,7 @@ Expected: a success message appears, and the model's status changes to **Ready**
 2. Enter `The team won the championship after a very close game.`
 3. Keep the default model and label set, then click **Classify**.
 
-Expected: the predicted class is `sports`, with its confidence, a ranked list of labels, the model details, and a message showing where the result was saved. On CPU, the first request took about 5 seconds because the model must load, and later ones took about 2 seconds.
+Expected: your text and the predicted class `sports`, with its confidence, a ranked list of labels, the model details, and a message showing where the result was saved. On CPU during development, the first DeBERTa request took about 8 seconds because the model must load, and later ones took 2 to 3 seconds. BART took about 0.6 seconds per request after loading.
 
 ### 6. Verify the result in MinIO
 
@@ -198,7 +198,7 @@ Only one model stays in memory at a time. Selecting a different model replaces t
 
 Label sets are stored in `configs/labels.yaml`. On the admin page, under **Candidate labels**, you can choose a set or **New label set**, add and remove labels, and click **Save label set**. Saved sets appear on the classification page.
 
-A label set needs at least two labels. Empty labels and duplicates are rejected, and labels that differ only by case or surrounding spaces count as duplicates.
+A label set needs at least two labels. Empty labels and duplicates are rejected, and labels that differ only by case or surrounding spaces count as duplicates. Control characters are removed from labels and input text.
 
 > Saving from the admin page changes `configs/labels.yaml`, which Git tracks. Check that change before committing it. To undo it, run `git restore configs/labels.yaml`.
 
@@ -310,6 +310,7 @@ The app opens at <http://localhost:8501>. Its models are kept in a Docker volume
 
 | Problem | Likely cause and fix |
 |---|---|
+| `Filename too long` during `git clone` | The clone folder's path is too long for Windows. Clone to a short path such as `C:\src`. |
 | `Activate.ps1` is blocked by an execution policy | Run `Set-ExecutionPolicy -Scope Process RemoteSigned`, then activate again. |
 | `streamlit` or `pytest` is not recognized | The virtual environment isn't active. Activate it. |
 | `MINIO_ACCESS_KEY is not set` | There's no `.env` file. Run `Copy-Item .env.example .env`, then restart Streamlit. |
@@ -345,6 +346,10 @@ The assignment describes itself as a draft that developers may adapt as long as 
 | Bucket `zeroshot_learning_output` | `zeroshot-learning-output` | MinIO's server rejects the original name with `InvalidBucketName`. |
 | Image `minio/minio` | Pinned Bitnami server and console images | The official images were unavailable during development, and this server image has no built-in console. |
 | `TRANSFORMERS_CACHE` | `HF_HOME` only | The Transformers cache code now uses `HF_HOME`. |
+| `MINIO_ENDPOINT=minio:9000` in `.env.example` | `localhost:9000` | Streamlit runs on your computer by default, where `minio` doesn't resolve. The optional app container uses `minio:9000`. |
+| Project folder `zeroshot-mlops/` | `zeroshot-textclassification-mlops/` | The repository also holds another assignment, so the project has a descriptive folder. |
+| `ci.yml` | `zeroshot-ci.yml` | The name identifies this project in a shared repository. |
+| Flat `tests/` folder | `tests/unit/` and `tests/integration/` | This lets the fast tests run without MinIO. |
 | CI workflow in the project folder | Repository root | GitHub only runs workflows from there. |
 | `specification.md` | `spec.md` | This is the file name Spec Kit generates. |
 | GitHub Copilot for AI assistance and this README | Claude Code | This was the AI coding assistant used with Spec Kit. The README was reviewed against the implementation. |

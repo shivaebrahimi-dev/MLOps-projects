@@ -76,10 +76,54 @@ def test_result_is_shown_and_saved(setup):
     assert page.metric[0].value == "sports"
     assert page.metric[1].value == "0.90"
     assert "predictions/x.json" in page.success[0].value
-    assert "Request ID" in page.text[0].value
+    assert page.text[0].value == SAMPLE
+    assert "Request ID" in page.text[1].value
     assert len(storage.saved) == 1
     assert storage.saved[0][0].input_text == SAMPLE
     assert storage.saved[0][1]
+
+
+def test_selected_model_and_label_set_are_the_ones_used(monkeypatch, tmp_path):
+    labels_path = tmp_path / "labels.yaml"
+    labels_path.write_text(
+        "default: topics\n"
+        "label_sets:\n"
+        "  - {name: topics, labels: [sports, finance]}\n"
+        "  - {name: moods, labels: [happy, sad]}\n"
+    )
+    other = type(MODEL)("org/other", "Other Model", MODEL.task, "def456")
+    models = ModelManager([MODEL, other], tmp_path / "models", tmp_path / "cache")
+    make_ready_model(models)
+    make_ready_model(models, other.id, other.revision)
+    loaded_paths = []
+
+    def factory(path):
+        loaded_paths.append(path)
+        return FakePipeline({"happy": 0.8, "sad": 0.2})
+
+    storage = FakeStorage()
+    services = Services(
+        settings=parse_settings({"MINIO_ACCESS_KEY": "a", "MINIO_SECRET_KEY": "b"}),
+        models=models,
+        labels=LabelManager(labels_path),
+        classifier=Classifier(models, 100, pipeline_factory=factory),
+        storage=storage,
+    )
+    monkeypatch.setattr(app.ui_state, "_create_services", lambda: services)
+
+    # A browser sends all of a form's values together when it is submitted.
+    page = open_page()
+    page.text_area[0].set_value(SAMPLE)
+    page.selectbox[0].select("Other Model")
+    page.selectbox[1].select(page.selectbox[1].options[1])
+    page = page.button[0].click().run()
+
+    assert not page.exception
+    result = storage.saved[0][0]
+    assert result.model_id == other.id
+    assert result.model_revision == other.revision
+    assert result.candidate_labels == ("happy", "sad")
+    assert loaded_paths == [models.model_path(other.id)]
 
 
 def test_empty_text_shows_an_error_and_saves_nothing(setup):

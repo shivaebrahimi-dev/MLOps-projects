@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from app.services.label_manager import validate_labels
+from app.services.label_manager import sanitize_text, validate_labels
 from app.services.model_manager import ModelManager, ModelStatus
 from app.utils.errors import ClassificationError, InvalidInputError, ModelNotReadyError
 from app.utils.logging_config import log_event
@@ -73,7 +73,7 @@ class Classifier:
         self._lock = threading.Lock()
 
     def validate_text(self, text: object) -> str:
-        cleaned = text.strip() if isinstance(text, str) else ""
+        cleaned = sanitize_text(text)
         if not cleaned:
             raise InvalidInputError("Enter some text to classify.")
         if len(cleaned) > self._max_input_chars:

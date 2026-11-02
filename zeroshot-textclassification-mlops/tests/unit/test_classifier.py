@@ -78,6 +78,19 @@ def test_empty_text_is_rejected(classifier, pipeline, text):
     assert pipeline.calls == []
 
 
+def test_control_characters_are_removed_but_line_breaks_are_kept(classifier):
+    result = classifier.classify("One\x00 two\x1b\nthree\t.", MODEL.id, LABELS)
+
+    assert result.input_text == "One two\nthree\t."
+
+
+def test_text_of_only_control_characters_is_rejected(classifier, pipeline):
+    with pytest.raises(InvalidInputError, match="Enter some text"):
+        classifier.classify("\x00\x07\x1b", MODEL.id, LABELS)
+
+    assert pipeline.calls == []
+
+
 def test_text_at_the_limit_is_accepted(classifier):
     assert classifier.classify("x" * 20, MODEL.id, LABELS).input_text == "x" * 20
 

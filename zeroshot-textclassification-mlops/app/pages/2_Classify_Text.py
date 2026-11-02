@@ -16,6 +16,8 @@ from app.utils.errors import StorageError, ZeroShotError
 
 def show_result(result: ClassificationResult) -> None:
     st.subheader("Result")
+    st.write("**Input text**")
+    st.text(result.input_text)
     predicted, confidence = st.columns(2)
     predicted.metric("Predicted class", result.predicted_class)
     confidence.metric("Confidence", f"{result.confidence:.2f}")

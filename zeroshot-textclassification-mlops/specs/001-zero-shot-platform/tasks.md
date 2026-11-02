@@ -157,7 +157,7 @@ test-first development, so each test task may be completed alongside its impleme
 ### Implementation for User Story 5
 
 - [x] T043 [P] [US5] Create `Dockerfile` for the app with Python 3.12 and pinned dependencies, and add it to `docker-compose.yml` under an opt-in `app` profile with `MINIO_ENDPOINT=minio:9000`
-- [ ] T044 [US5] Create `.github/workflows/zeroshot-ci.yml` at the repository root, filtered to `zeroshot-textclassification-mlops/**`, running from that folder with CPU-only PyTorch, a MinIO service container, ruff, unit tests, and integration tests that fail instead of skipping
+- [x] T044 [US5] Create `.github/workflows/zeroshot-ci.yml` at the repository root, filtered to `zeroshot-textclassification-mlops/**`, running from that folder with CPU-only PyTorch, a MinIO service container, ruff, unit tests, and integration tests that fail instead of skipping
 - [x] T045 [US5] Write `README.md` covering every item in the assignment's README notice: purpose, architecture, code structure, module responsibilities, models, model and cache workflow, labels, bucket and output format, prerequisites, environment variables, quick start, MinIO and Streamlit startup, downloading a model, classifying, verifying in MinIO, tests, troubleshooting, and security limitations
 - [x] T046 [US5] Disclose the project's departures from the assignment in `README.md`: the bucket name (DR-001), MinIO image (DR-003), `TRANSFORMERS_CACHE`, CI location, `spec.md` file name, and use of Claude Code instead of GitHub Copilot, and explain why Clear Cache may find little to remove
 
@@ -169,12 +169,12 @@ test-first development, so each test task may be completed alongside its impleme
 
 **Purpose**: Final checks before submission
 
-- [ ] T047 Run ruff and the full test suite, and fix any failures across `app/` and `tests/`
-- [ ] T048 Run every scenario in `specs/001-zero-shot-platform/quickstart.md` with both real models, measure SC-002, SC-005, and SC-008, and record the results in `specs/001-zero-shot-platform/research.md`
+- [x] T047 Run ruff and the full test suite, and fix any failures across `app/` and `tests/`
+- [x] T048 Run every scenario in `specs/001-zero-shot-platform/quickstart.md` with both real models, measure SC-002, SC-005, and SC-008, and record the results in `specs/001-zero-shot-platform/research.md`
 - [ ] T049 Rehearse the assignment's section 13 demonstration from start to finish, using `README.md` only, and fix any step that fails
-- [ ] T050 Check `README.md` against the final code and the assignment's section 11 acceptance criteria, and run `/speckit-analyze` to check that the Spec Kit documents agree
+- [x] T050 Check `README.md` against the final code and the assignment's section 11 acceptance criteria, and run `/speckit-analyze` to check that the Spec Kit documents agree
 - [x] T051 Remove the Sync Impact Report comment from `.specify/memory/constitution.md`
-- [ ] T052 Before the final push, confirm that Git tracks no secrets, `.env` files, model files, or cache directories, and that no tracked file contains personal names or email addresses of course staff
+- [x] T052 Before the final push, confirm that Git tracks no secrets, `.env` files, model files, or cache directories, and that no tracked file contains personal names or email addresses of course staff
 
 **Checkpoint**: Ready to merge to `main` and submit by email before November 14, 2026
 
