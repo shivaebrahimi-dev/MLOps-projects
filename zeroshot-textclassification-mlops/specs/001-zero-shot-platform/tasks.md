@@ -96,14 +96,14 @@ test-first development, so each test task may be completed alongside its impleme
 
 ### Implementation for User Story 2
 
-- [ ] T031 [US2] Add downloads to `app/services/model_manager.py` per the plan: refuse a second download through the lock file, fetch the pinned revision into `MODEL_DIR/.tmp/` with only configuration, tokenizer, and `model.safetensors` files, write `.download-complete.json`, rename into place, and on failure clean up and record a secret-free error
-- [ ] T032 [US2] Add the model table, locations, download, and refresh areas to `app/pages/1_Admin.py` per `specs/001-zero-shot-platform/contracts/ui-pages.md`, with the local-use notice and per-model success or error messages
-- [ ] T033 [US2] Log download start, completion, skips, and failures with model ID, revision, and duration in `app/services/model_manager.py`
+- [x] T031 [US2] Add downloads to `app/services/model_manager.py` per the plan: refuse a second download through the lock file, fetch the pinned revision into `MODEL_DIR/.tmp/` with only configuration, tokenizer, and `model.safetensors` files, write `.download-complete.json`, rename into place, and on failure clean up and record a secret-free error
+- [x] T032 [US2] Add the model table, locations, download, and refresh areas to `app/pages/1_Admin.py` per `specs/001-zero-shot-platform/contracts/ui-pages.md`, with the local-use notice and per-model success or error messages
+- [x] T033 [US2] Log download start, completion, skips, and failures with model ID, revision, and duration in `app/services/model_manager.py`
 
 ### Tests for User Story 2
 
-- [ ] T034 [P] [US2] Add unit tests in `tests/unit/test_model_download.py` with a fake downloader: existing models are not downloaded again, failed downloads leave no final folder or temporary files, stale locks are removed, a second download is refused, and a newly configured model appears without code changes
-- [ ] T035 [P] [US2] Add a page smoke test with fake services in `tests/unit/test_admin_page.py`
+- [x] T034 [P] [US2] Add unit tests in `tests/unit/test_model_download.py` with a fake downloader: existing models are not downloaded again, failed downloads leave no final folder or temporary files, stale locks are removed, a second download is refused, and a newly configured model appears without code changes
+- [x] T035 [P] [US2] Add a page smoke test with fake services in `tests/unit/test_admin_page.py`
 
 **Checkpoint**: Stories 1 and 2 together give the full download-to-prediction workflow with real models
 

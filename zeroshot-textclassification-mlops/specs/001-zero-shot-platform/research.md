@@ -75,9 +75,10 @@ Findings were checked on 2026-11-01. "Tested" means the check was run in an isol
 
 - **Decision**: Do not add `sentencepiece` for now.
 - **Rationale**: Tested without it: the DeBERTa and BART tokenizers both load at their pinned revisions and
-  tokenize text.
-- **Not yet tested**: Full inference with the real models. If it needs `sentencepiece`, DR-002 already allows
-  tokenizer dependencies.
+  tokenize text. The real DeBERTa model also downloaded (38 seconds, 380 MB on disk) and classified four sample
+  sentences correctly on CPU, in about 5 seconds for the first request and 1.6 seconds afterward.
+- **Not yet tested**: Full inference with BART, whose weights are 1.63 GB. If it needs another tokenizer
+  dependency, DR-002 already allows it.
 
 ## R7. PyTorch backend enforcement
 
