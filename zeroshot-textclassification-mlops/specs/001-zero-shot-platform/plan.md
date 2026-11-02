@@ -154,14 +154,14 @@ treats MinIO as required, so skipping can't hide a failure there.
 
 ## Docker and Local Development
 
-- **Default**: `docker compose up -d minio` starts MinIO only, and Streamlit runs in the local virtual environment.
+- **Default**: `docker compose up -d minio minio-console` starts MinIO and its console, and Streamlit runs in the local virtual environment.
 - **Optional container**: `docker compose --profile app up` also runs the application from the `Dockerfile`.
 - **Ports**: 9000 for the MinIO API, 9001 for its console, and 8501 for Streamlit.
 - **Commands**: The `Makefile` wraps common commands, and the README also lists them directly because `make` often
   isn't installed on Windows.
 
-**First validation step**: Pull and start the MinIO image, confirm its data path, and confirm that the original
-underscore bucket name is rejected, which completes DR-001 and DR-003's evidence.
+**Validated in T003**: The MinIO and console images start and work together, and the underscore bucket name is
+rejected, as recorded in research R2 and R3.
 
 ## Deployment
 

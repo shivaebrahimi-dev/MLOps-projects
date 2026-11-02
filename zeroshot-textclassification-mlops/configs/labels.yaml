@@ -1,0 +1,10 @@
+default: general-topics
+label_sets:
+  - name: general-topics
+    labels:
+      - sports
+      - politics
+      - technology
+      - finance
+      - health
+      - education

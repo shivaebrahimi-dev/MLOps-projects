@@ -16,7 +16,7 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 Copy-Item .env.example .env
-docker compose up -d minio
+docker compose up -d minio minio-console
 streamlit run app/streamlit_app.py
 ```
 

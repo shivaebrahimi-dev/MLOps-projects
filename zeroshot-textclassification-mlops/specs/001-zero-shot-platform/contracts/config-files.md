@@ -12,6 +12,7 @@ Values come from the process environment, or from a local `.env` file that Git i
 | `MINIO_SECURE` | `false` | Use HTTPS when `true`. |
 | `MINIO_BUCKET` | `zeroshot-learning-output` | Bucket for prediction records. |
 | `MINIO_IMAGE` | `bitnamilegacy/minio:2025.7.23-debian-12-r5` | Compose image for local MinIO. |
+| `MINIO_CONSOLE_IMAGE` | `bitnamilegacy/minio-object-browser:2.0.2-debian-12-r4` | Compose image for the MinIO console. |
 | `MODEL_DIR` | `./models` | Controlled model directory. |
 | `HF_HOME` | `./.cache/huggingface` | Hugging Face cache root. |
 | `HF_TOKEN` | Empty | Optional Hugging Face token. |

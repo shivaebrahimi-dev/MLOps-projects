@@ -1,0 +1,21 @@
+[project]
+name = "zeroshot-mlops"
+version = "0.1.0"
+description = "Zero-shot text classification platform with model management and MinIO storage"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".specify", ".claude", "specs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "integration: requires a running MinIO server",
+]

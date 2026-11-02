@@ -161,9 +161,9 @@ before implementation begins.
 - **Status**: Accepted by the project developer, 2026-11-01.
 - **Decision**: The default bucket name is `zeroshot-learning-output`, not the
   `zeroshot_learning_output` named in the original assignment.
-- **Reason**: MinIO's server source applies strict bucket-name validation
-  (`CheckValidBucketNameStrict`), whose pattern does not permit underscores. The assignment's name
-  is therefore expected to fail when the bucket is created.
+- **Reason**: On a running MinIO, both the Python client and the `mc` tool refused to create the
+  underscore name with an invalid-name error, and accepted the hyphen name. MinIO's server source also
+  applies strict validation (`CheckValidBucketNameStrict`) that does not permit underscores.
 - **Impact**: This differs from the original assignment's bucket name, which the assignment's notice
   permits because the main project objective is preserved. The name remains configurable through
   `MINIO_BUCKET`, and the difference MUST be disclosed in the README and the final submission.
@@ -183,17 +183,19 @@ before implementation begins.
 
 ### DR-003: MinIO container image source
 
-- **Status**: Accepted by the project developer, 2026-11-01. A pull and startup test is the first
-  implementation task.
-- **Decision**: Local MinIO uses the pinned image `bitnamilegacy/minio:2025.7.23-debian-12-r5`
-  instead of the `minio/minio` image in the assignment's example. The image is configurable through
-  `MINIO_IMAGE`.
-- **Reason**: On 2026-11-01, anonymous requests for the official images on Docker Hub and Quay were
-  denied, and MinIO's repository states that the community edition is now distributed as source only.
+- **Status**: Accepted by the project developer, 2026-11-01. The console image was added during task
+  T003 because this server image serves no console, and the assignment's sections 7 and 13 require one.
+- **Decision**: Local MinIO uses the pinned image `bitnamilegacy/minio:2025.7.23-debian-12-r5`, and its
+  console uses `bitnamilegacy/minio-object-browser:2.0.2-debian-12-r4`, instead of the `minio/minio`
+  image in the assignment's example. They are configurable through `MINIO_IMAGE` and
+  `MINIO_CONSOLE_IMAGE`.
+- **Reason**: On 2026-11-01, the official images on Docker Hub and Quay were unavailable, and MinIO's
+  repository states that the community edition is now distributed as source only. The chosen images were
+  pulled and tested: storage, restarts, console login, and bucket access all worked.
 - **Benefits and risks**: The pinned image is a packaged MinIO server that should stay unchanged, but
   it receives no further updates and its layout differs from the official image. It MUST be used only
   for local development and testing.
 - **Impact on reproducibility**: A fixed tag improves repeatability. If the image becomes unavailable,
   `MINIO_IMAGE` allows a replacement, which MUST be recorded here.
 
-**Version**: 1.0.1 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-01
+**Version**: 1.0.2 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-01

@@ -26,15 +26,15 @@ test-first development, so each test task may be completed alongside its impleme
 
 **Purpose**: Protect the public repository, confirm MinIO works, and initialize the project
 
-- [ ] T001 Create `.gitignore` covering `.env`, `.venv/`, `.cache/`, `models/*` except `models/.gitkeep`, and Python, pytest, and ruff caches, before any model or secret exists
-- [ ] T002 Create `docker-compose.yml` with a `minio` service using `${MINIO_IMAGE:-bitnamilegacy/minio:2025.7.23-debian-12-r5}`, ports 9000 and 9001, credentials from the environment, and a named data volume
-- [ ] T003 Start MinIO, confirm its data path, console, and survival of a restart, and confirm whether `zeroshot_learning_output` is rejected and `zeroshot-learning-output` accepted. Record the results in `specs/001-zero-shot-platform/research.md` (R2, R3) and update DR-001 and DR-003 in `.specify/memory/constitution.md`. If the image fails, switch to `pgsty/minio:RELEASE.2026-08-04T00-00-00Z` and record that instead
-- [ ] T004 [P] Create `requirements.txt` with the pinned versions from research R1: torch 2.15.0, transformers 5.22.1, huggingface_hub 2.4.0, streamlit 1.66.1, minio 7.2.20, PyYAML 6.0.3, python-dotenv 1.2.4, pytest 9.2.0, and ruff 0.17.3
-- [ ] T005 [P] Create `pyproject.toml` with project metadata, Python 3.12, ruff settings, pytest paths, and the `integration` marker
-- [ ] T006 [P] Create `.env.example` with every variable in `specs/001-zero-shot-platform/contracts/config-files.md`, using placeholders and noting that `minioadmin` is for local use only
-- [ ] T007 [P] Create `configs/models.yaml` with both models and their pinned revisions, and `configs/labels.yaml` with the `general-topics` default set, per `specs/001-zero-shot-platform/contracts/config-files.md`
-- [ ] T008 [P] Create the `app/`, `app/pages/`, `app/services/`, `app/utils/`, `tests/unit/`, and `tests/integration/` packages, plus `models/.gitkeep`
-- [ ] T009 [P] Create `Makefile` targets for install, MinIO start and stop, app start, lint, unit tests, and integration tests
+- [x] T001 Create `.gitignore` covering `.env`, `.venv/`, `.cache/`, `models/*` except `models/.gitkeep`, and Python, pytest, and ruff caches, before any model or secret exists
+- [x] T002 Create `docker-compose.yml` with a `minio` service using `${MINIO_IMAGE:-bitnamilegacy/minio:2025.7.23-debian-12-r5}`, a `minio-console` service using `${MINIO_CONSOLE_IMAGE:-bitnamilegacy/minio-object-browser:2.0.2-debian-12-r4}`, ports 9000 and 9001, credentials from the environment, and a named data volume
+- [x] T003 Start MinIO, confirm its data path, console, and survival of a restart, and confirm whether `zeroshot_learning_output` is rejected and `zeroshot-learning-output` accepted. Record the results in `specs/001-zero-shot-platform/research.md` (R2, R3) and update DR-001 and DR-003 in `.specify/memory/constitution.md`. If the image fails, switch to `pgsty/minio:RELEASE.2026-08-04T00-00-00Z` and record that instead
+- [x] T004 [P] Create `requirements.txt` with the pinned versions from research R1: torch 2.15.0, transformers 5.22.1, huggingface_hub 2.4.0, streamlit 1.66.1, minio 7.2.20, PyYAML 6.0.3, python-dotenv 1.2.4, pytest 9.2.0, and ruff 0.17.3
+- [x] T005 [P] Create `pyproject.toml` with project metadata, Python 3.12, ruff settings, pytest paths, and the `integration` marker
+- [x] T006 [P] Create `.env.example` with every variable in `specs/001-zero-shot-platform/contracts/config-files.md`, using placeholders and noting that `minioadmin` is for local use only
+- [x] T007 [P] Create `configs/models.yaml` with both models and their pinned revisions, and `configs/labels.yaml` with the `general-topics` default set, per `specs/001-zero-shot-platform/contracts/config-files.md`
+- [x] T008 [P] Create the `app/`, `app/pages/`, `app/services/`, `app/utils/`, `tests/unit/`, and `tests/integration/` packages, plus `models/.gitkeep`
+- [x] T009 [P] Create `Makefile` targets for install, MinIO start and stop, app start, lint, unit tests, and integration tests
 
 **Checkpoint**: MinIO runs in Docker Desktop, and no secrets or models can be committed by accident
 

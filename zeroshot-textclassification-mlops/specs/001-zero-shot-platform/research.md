@@ -14,13 +14,19 @@ Findings were checked on 2026-11-01. "Tested" means the check was run in an isol
 
 ## R2. MinIO container image
 
-- **Decision**: Use `bitnamilegacy/minio:2025.7.23-debian-12-r5`, configurable through `MINIO_IMAGE`,
-  as recorded in constitution decision DR-003.
-- **Rationale**: Anonymous registry requests for `minio/minio` on Docker Hub and `minio/minio` on Quay
-  were denied, and the legacy download archive returned 410. MinIO's repository README says the
-  community edition is now source-only. The Bitnami tag is listed on Docker Hub.
-- **Not yet tested**: Pulling and starting the image, because Docker was not running. Its data path and
-  startup options are based on Bitnami's usual layout and must be confirmed first.
+- **Decision**: Use `bitnamilegacy/minio:2025.7.23-debian-12-r5` for the server and
+  `bitnamilegacy/minio-object-browser:2.0.2-debian-12-r4` for the console, configurable through
+  `MINIO_IMAGE` and `MINIO_CONSOLE_IMAGE`, as recorded in constitution decision DR-003.
+- **Rationale**: `docker manifest inspect` could not find `minio/minio:latest` on Docker Hub or
+  `quay.io/minio/minio:latest`, and the legacy download archive returned 410. MinIO's repository README
+  says the community edition is now source-only.
+- **Tested (T003)**: The server starts healthy with data at `/bitnami/minio/data`, stores and returns an
+  object, and keeps it after a restart. Its digest is
+  `sha256:6dabb4a2088c9a79908de3bc05f4586c23ad2182c8908e7e3acbf61c1467fb20`.
+- **Console**: The server image passes `--console-address` but nothing listens on that port, so the demo's
+  console needs the separate object-browser image. That image must be started with the `server` command.
+  Tested: its page loads on port 9001, a wrong password returns 401, the right one succeeds, and it lists the
+  bucket.
 - **Alternatives considered**:
   - `pgsty/minio:RELEASE.2026-08-04T00-00-00Z`: newer and follows the official image's layout, but it is
     a third-party community build. It is the first fallback if the Bitnami image fails.
@@ -30,9 +36,10 @@ Findings were checked on 2026-11-01. "Tested" means the check was run in an isol
 ## R3. Bucket name
 
 - **Decision**: Default to `zeroshot-learning-output` (DR-001).
-- **Rationale**: MinIO's server source applies strict validation that rejects underscores, while the
-  Python client's default check accepts them, so a problem with the original name would only appear at
-  runtime.
+- **Rationale**: Tested on running MinIO (T003): `make_bucket` in the Python client raises `ValueError` for
+  `zeroshot_learning_output`, and `mc mb` fails with "Bucket name contains invalid characters". Both accept
+  `zeroshot-learning-output`. MinIO's server source also rejects underscores. Both refusals may happen in the
+  client tools, so the server's own response was confirmed from source rather than by a direct request.
 
 ## R4. Model download and readiness
 
