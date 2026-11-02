@@ -25,6 +25,10 @@ class ModelNotReadyError(ZeroShotError):
     """The selected model is not available for inference."""
 
 
+class ClassificationError(ZeroShotError):
+    """Inference could not be completed."""
+
+
 class ModelDownloadError(ZeroShotError):
     """A model could not be downloaded."""
 

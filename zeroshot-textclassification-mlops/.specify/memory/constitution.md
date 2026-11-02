@@ -161,9 +161,8 @@ before implementation begins.
 - **Status**: Accepted by the project developer, 2026-11-01.
 - **Decision**: The default bucket name is `zeroshot-learning-output`, not the
   `zeroshot_learning_output` named in the original assignment.
-- **Reason**: On a running MinIO, both the Python client and the `mc` tool refused to create the
-  underscore name with an invalid-name error, and accepted the hyphen name. MinIO's server source also
-  applies strict validation (`CheckValidBucketNameStrict`) that does not permit underscores.
+- **Reason**: A running MinIO server answers `InvalidBucketName` for the underscore name, and the Python
+  client and `mc` tool also refuse it. All of them accept the hyphen name.
 - **Impact**: This differs from the original assignment's bucket name, which the assignment's notice
   permits because the main project objective is preserved. The name remains configurable through
   `MINIO_BUCKET`, and the difference MUST be disclosed in the README and the final submission.
@@ -171,12 +170,12 @@ before implementation begins.
 ### DR-002: Approved supporting libraries
 
 - **Status**: Accepted by the project developer, 2026-11-01.
-- **Decision**: The core stack MAY be supported by the `minio` client, `huggingface_hub`, `PyYAML`,
-  `python-dotenv`, `pytest`, a lint or formatting tool, and tokenizer dependencies that a supported
-  model requires. A library not listed here MUST be added to this record before it is used.
-- **Reason**: The core stack needs these libraries for object storage, model downloads, YAML
-  configuration, loading `.env` files, testing, quality gates, and tokenization. None of them
-  replaces a core technology.
+- **Decision**: The core stack MAY be supported by the `minio` client, `urllib3`, `huggingface_hub`,
+  `PyYAML`, `python-dotenv`, `pytest`, a lint or formatting tool, and tokenizer dependencies that a
+  supported model requires. A library not listed here MUST be added to this record before it is used.
+- **Reason**: The core stack needs these libraries for object storage, short storage timeouts, model
+  downloads, YAML configuration, loading `.env` files, testing, quality gates, and tokenization. None of
+  them replaces a core technology.
 - **Benefits and risks**: They avoid custom implementations of common tasks, but each one adds a
   dependency that can change or conflict with others.
 - **Impact on reproducibility**: Each library MUST be pinned with the project's other dependencies.
@@ -198,4 +197,4 @@ before implementation begins.
 - **Impact on reproducibility**: A fixed tag improves repeatability. If the image becomes unavailable,
   `MINIO_IMAGE` allows a replacement, which MUST be recorded here.
 
-**Version**: 1.0.2 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-01
+**Version**: 1.0.3 | **Ratified**: 2026-11-01 | **Last Amended**: 2026-11-01

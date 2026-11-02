@@ -36,10 +36,10 @@ Findings were checked on 2026-11-01. "Tested" means the check was run in an isol
 ## R3. Bucket name
 
 - **Decision**: Default to `zeroshot-learning-output` (DR-001).
-- **Rationale**: Tested on running MinIO (T003): `make_bucket` in the Python client raises `ValueError` for
-  `zeroshot_learning_output`, and `mc mb` fails with "Bucket name contains invalid characters". Both accept
-  `zeroshot-learning-output`. MinIO's server source also rejects underscores. Both refusals may happen in the
-  client tools, so the server's own response was confirmed from source rather than by a direct request.
+- **Rationale**: Tested on running MinIO: asked directly about `zeroshot_learning_output`, the server returns
+  the error `InvalidBucketName`. `make_bucket` in the Python client raises `ValueError` for that name, and
+  `mc mb` fails with "Bucket name contains invalid characters". All accept `zeroshot-learning-output`. An
+  integration test keeps checking that the application reports this clearly.
 
 ## R4. Model download and readiness
 

@@ -70,19 +70,19 @@ test-first development, so each test task may be completed alongside its impleme
 
 ### Implementation for User Story 1
 
-- [ ] T021 [US1] Implement `app/services/classifier.py`: load only `ready` models from local paths, keep at most one pipeline in memory, run single-label zero-shot inference, raise an error unless the model is a `torch.nn.Module`, measure latency, and reject text unless it is "Not empty after trimming, and at most `MAX_INPUT_CHARS` characters (default 10,000)"
-- [ ] T022 [US1] Implement `app/services/minio_storage.py`: build a client with short timeouts and limited retries, create the bucket when needed while tolerating an existing one, build records with UUID4 request IDs and UTC ISO 8601 timestamps, and write `application/json` objects to `predictions/YYYY/MM/DD/{request_id}.json`
-- [ ] T023 [US1] Implement `app/pages/2_Classify_Text.py` per `specs/001-zero-shot-platform/contracts/ui-pages.md`, showing the predicted class, confidence, ranked labels, model, revision, timestamp, request ID, and storage outcome, and displaying input as plain text
-- [ ] T024 [US1] Add the failure paths to `app/pages/2_Classify_Text.py`: empty or long text, no ready model, invalid label set, and a storage failure that shows the result with a clear "not saved" error and the request ID
-- [ ] T025 [US1] Log inference and storage writes with request ID, model, duration, and outcome in `app/services/classifier.py` and `app/services/minio_storage.py`
+- [x] T021 [US1] Implement `app/services/classifier.py`: load only `ready` models from local paths, keep at most one pipeline in memory, run single-label zero-shot inference, raise an error unless the model is a `torch.nn.Module`, measure latency, and reject text unless it is "Not empty after trimming, and at most `MAX_INPUT_CHARS` characters (default 10,000)"
+- [x] T022 [US1] Implement `app/services/minio_storage.py`: build a client with short timeouts and limited retries, create the bucket when needed while tolerating an existing one, build records with UUID4 request IDs and UTC ISO 8601 timestamps, and write `application/json` objects to `predictions/YYYY/MM/DD/{request_id}.json`
+- [x] T023 [US1] Implement `app/pages/2_Classify_Text.py` per `specs/001-zero-shot-platform/contracts/ui-pages.md`, showing the predicted class, confidence, ranked labels, model, revision, timestamp, request ID, and storage outcome, and displaying input as plain text
+- [x] T024 [US1] Add the failure paths to `app/pages/2_Classify_Text.py`: empty or long text, no ready model, invalid label set, and a storage failure that shows the result with a clear "not saved" error and the request ID
+- [x] T025 [US1] Log inference and storage writes with request ID, model, duration, and outcome in `app/services/classifier.py` and `app/services/minio_storage.py`
 
 ### Tests for User Story 1
 
-- [ ] T026 [P] [US1] Add unit tests in `tests/unit/test_classifier.py` with a fake pipeline: valid classification, empty text, length limit, fewer than two labels, descending ranking, predicted class equal to the top label, and rejection of a non-PyTorch model
-- [ ] T027 [P] [US1] Add unit tests in `tests/unit/test_minio_storage.py` with a fake client: bucket creation, valid JSON, required fields against `specs/001-zero-shot-platform/contracts/prediction-record.schema.json`, the date-based path, and clear storage errors
-- [ ] T028 [P] [US1] Add integration tests in `tests/integration/test_minio_storage.py` against running MinIO for automatic bucket creation, stored JSON, the object path, and connection failure
-- [ ] T029 [US1] Add an end-to-end test in `tests/integration/test_end_to_end.py` that runs a tiny test model through the classifier and confirms the stored record in MinIO
-- [ ] T030 [P] [US1] Add a page smoke test with Streamlit's `AppTest` and fake services in `tests/unit/test_classify_page.py`
+- [x] T026 [P] [US1] Add unit tests in `tests/unit/test_classifier.py` with a fake pipeline: valid classification, empty text, length limit, fewer than two labels, descending ranking, predicted class equal to the top label, and rejection of a non-PyTorch model
+- [x] T027 [P] [US1] Add unit tests in `tests/unit/test_minio_storage.py` with a fake client: bucket creation, valid JSON, required fields against `specs/001-zero-shot-platform/contracts/prediction-record.schema.json`, the date-based path, and clear storage errors
+- [x] T028 [P] [US1] Add integration tests in `tests/integration/test_minio_storage.py` against running MinIO for automatic bucket creation, stored JSON, the object path, and connection failure
+- [x] T029 [US1] Add an end-to-end test in `tests/integration/test_end_to_end.py` that runs a tiny test model through the classifier and confirms the stored record in MinIO
+- [x] T030 [P] [US1] Add a page smoke test with Streamlit's `AppTest` and fake services in `tests/unit/test_classify_page.py`
 
 **Checkpoint**: User Story 1 works with a pre-provisioned model, which is the MVP
 
