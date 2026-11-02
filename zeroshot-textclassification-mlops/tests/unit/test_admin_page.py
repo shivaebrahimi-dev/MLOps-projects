@@ -110,6 +110,135 @@ def test_failed_download_shows_an_error_and_failed_status(services):
     assert "retry" in table_cell(page, "Details")
 
 
+def checkbox(page, fragment):
+    return next(item for item in page.checkbox if fragment in item.label)
+
+
+def test_delete_is_disabled_until_confirmed(services):
+    built = services()
+    path = make_ready_model(built.models)
+
+    page = open_page()
+
+    assert button(page, "Delete model").disabled
+    assert path.exists()
+
+
+def test_delete_after_confirmation_removes_the_model(services):
+    built = services()
+    path = make_ready_model(built.models)
+    page = open_page()
+
+    checkbox(page, "removes the local files").check().run()
+    page = button(page, "Delete model").click().run()
+
+    assert not page.exception
+    assert not path.exists()
+    assert "was deleted" in page.success[0].value
+    assert table_cell(page, "Status") == "Not downloaded"
+    assert "No downloaded models" in page.caption[0].value
+
+
+def test_delete_section_is_empty_without_a_downloaded_model(services):
+    services()
+
+    page = open_page()
+
+    assert not [item for item in page.button if item.label == "Delete model"]
+
+
+def test_cache_cleanup_needs_confirmation_and_reports_the_outcome(services):
+    built = services()
+    (built.models.hf_home / "hub").mkdir(parents=True)
+    (built.models.hf_home / "hub" / "blob").write_bytes(b"x" * 2_000_000)
+    page = open_page()
+    assert button(page, "Clear cache").disabled
+
+    checkbox(page, "clears the download cache").check().run()
+    page = button(page, "Clear cache").click().run()
+
+    assert not page.exception
+    assert "freed 2 MB" in page.success[0].value
+    assert not (built.models.hf_home / "hub").exists()
+    assert button(page, "Clear cache").disabled
+
+
+def test_cache_cleanup_reports_a_missing_cache(services):
+    services()
+    page = open_page()
+
+    checkbox(page, "clears the download cache").check().run()
+    page = button(page, "Clear cache").click().run()
+
+    assert "no cache to clear" in page.info[0].value
+
+
+def text_input(page, label):
+    return next(item for item in page.text_input if item.label == label)
+
+
+def test_labels_of_the_selected_set_are_shown(services):
+    services()
+
+    page = open_page()
+
+    assert page.selectbox[-1].value == "topics"
+    assert {"sports", "finance"} <= {item.value for item in page.text}
+
+
+def test_label_can_be_added_and_saved(services):
+    built = services()
+    page = open_page()
+
+    text_input(page, "New label").set_value("health")
+    page = button(page, "Add label").click().run()
+    assert built.labels.get("topics").labels == ("sports", "finance")
+
+    page = button(page, "Save label set").click().run()
+
+    assert not page.exception
+    assert "was saved" in page.success[0].value
+    assert built.labels.get("topics").labels == ("sports", "finance", "health")
+
+
+def test_duplicate_label_shows_an_error(services):
+    services()
+    page = open_page()
+
+    text_input(page, "New label").set_value("SPORTS")
+    page = button(page, "Add label").click().run()
+
+    assert "duplicate" in page.error[0].value
+    assert "SPORTS" not in {item.value for item in page.text}
+
+
+def test_removing_too_many_labels_prevents_saving(services):
+    built = services()
+    page = open_page()
+
+    page = next(item for item in page.button if item.label == "Remove").click().run()
+    page = button(page, "Save label set").click().run()
+
+    assert "at least 2" in page.error[0].value
+    assert built.labels.get("topics").labels == ("sports", "finance")
+
+
+def test_new_label_set_can_be_created(services):
+    built = services()
+    page = open_page()
+    page.selectbox[-1].select("New label set").run()
+
+    text_input(page, "Name of the new label set").set_value("news")
+    for label in ("world", "local"):
+        text_input(page, "New label").set_value(label)
+        page = button(page, "Add label").click().run()
+    page = button(page, "Save label set").click().run()
+
+    assert not page.exception
+    assert built.labels.get("news").labels == ("world", "local")
+    assert page.selectbox[-1].value == "news"
+
+
 def test_refresh_reloads_status_from_disk(services):
     built = services()
     page = open_page()

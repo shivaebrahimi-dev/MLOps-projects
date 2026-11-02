@@ -117,12 +117,12 @@ test-first development, so each test task may be completed alongside its impleme
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Add adding, removing, and saving to `app/services/label_manager.py`, using a temporary file and replacement so a failed save cannot corrupt `configs/labels.yaml`
-- [ ] T037 [US3] Add the label area to `app/pages/1_Admin.py`, showing validation errors beside the form
+- [x] T036 [US3] Add adding, removing, and saving to `app/services/label_manager.py`, using a temporary file and replacement so a failed save cannot corrupt `configs/labels.yaml`
+- [x] T037 [US3] Add the label area to `app/pages/1_Admin.py`, showing validation errors beside the form
 
 ### Tests for User Story 3
 
-- [ ] T038 [P] [US3] Add unit tests in `tests/unit/test_label_persistence.py` for saved sets surviving a reload, refused invalid saves, and an unchanged file after a failed save
+- [x] T038 [P] [US3] Add unit tests in `tests/unit/test_label_persistence.py` for saved sets surviving a reload, refused invalid saves, and an unchanged file after a failed save
 
 **Checkpoint**: Label changes on the admin page appear on the classification page
 
@@ -136,13 +136,13 @@ test-first development, so each test task may be completed alongside its impleme
 
 ### Implementation for User Story 4
 
-- [ ] T039 [US4] Add model deletion to `app/services/model_manager.py`, unloading the model through `app/services/classifier.py` if it is active, and confirming the path is inside `MODEL_DIR` before removing it
-- [ ] T040 [US4] Add cache cleanup to `app/services/model_manager.py`, removing only `hub` and `xet` under `HF_HOME`, preserving saved tokens, reporting what was removed, and handling a missing cache
-- [ ] T041 [US4] Add the delete and cache areas to `app/pages/1_Admin.py`, with buttons disabled until a confirmation checkbox is ticked, and log both actions
+- [x] T039 [US4] Add model deletion to `app/services/model_manager.py`, unloading the model through `app/services/classifier.py` if it is active, and confirming the path is inside `MODEL_DIR` before removing it
+- [x] T040 [US4] Add cache cleanup to `app/services/model_manager.py`, removing only `hub` and `xet` under `HF_HOME`, preserving saved tokens, reporting what was removed, and handling a missing cache
+- [x] T041 [US4] Add the delete and cache areas to `app/pages/1_Admin.py`, with buttons disabled until a confirmation checkbox is ticked, and log both actions
 
 ### Tests for User Story 4
 
-- [ ] T042 [P] [US4] Add unit tests in `tests/unit/test_model_cleanup.py` for deletion, path safety, a missing cache, preserved tokens, and ready models surviving cache cleanup
+- [x] T042 [P] [US4] Add unit tests in `tests/unit/test_model_cleanup.py` for deletion, path safety, a missing cache, preserved tokens, and ready models surviving cache cleanup
 
 **Checkpoint**: The full model lifecycle works
 

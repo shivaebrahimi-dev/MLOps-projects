@@ -1,5 +1,8 @@
 """Candidate-label validation and label-set loading."""
 
+import logging
+import os
+import tempfile
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
@@ -7,6 +10,9 @@ from pathlib import Path
 import yaml
 
 from app.utils.errors import ConfigurationError, LabelValidationError
+from app.utils.logging_config import log_event
+
+logger = logging.getLogger(__name__)
 
 MINIMUM_LABELS = 2
 
@@ -34,6 +40,21 @@ def validate_labels(labels: Iterable[object]) -> tuple[str, ...]:
     return tuple(cleaned)
 
 
+def add_label(labels: Iterable[str], new_label: object) -> tuple[str, ...]:
+    """Return the labels with one more, for a set that may still be too small to save."""
+    text = new_label.strip() if isinstance(new_label, str) else ""
+    if not text:
+        raise LabelValidationError("Labels cannot be empty.")
+    current = tuple(labels)
+    if text.casefold() in {label.casefold() for label in current}:
+        raise LabelValidationError(f"Label '{text}' is a duplicate.")
+    return (*current, text)
+
+
+def remove_label(labels: Iterable[str], label: str) -> tuple[str, ...]:
+    return tuple(item for item in labels if item != label)
+
+
 def validate_set_name(name: object) -> str:
     text = name.strip() if isinstance(name, str) else ""
     if not text:
@@ -58,6 +79,46 @@ class LabelManager:
             if label_set.name.casefold() == name.strip().casefold():
                 return label_set
         raise LabelValidationError(f"Label set '{name}' was not found.")
+
+    def save(self, name: object, labels: Iterable[object], *, is_new: bool) -> LabelSet:
+        """Validate and persist a label set. Existing sets are replaced, keeping their position."""
+        saved = LabelSet(validate_set_name(name), validate_labels(labels))
+        default, label_sets = self._load()
+        folded = saved.name.casefold()
+        position = next(
+            (i for i, item in enumerate(label_sets) if item.name.casefold() == folded), None
+        )
+        if is_new and position is not None:
+            raise LabelValidationError(f"A label set named '{saved.name}' already exists.")
+        if position is None:
+            label_sets.append(saved)
+        else:
+            label_sets[position] = saved
+        self._write(default, label_sets)
+        log_event(logger, "label_set_saved", label_set=saved.name, label_count=len(saved.labels))
+        return saved
+
+    def _write(self, default: str, label_sets: list[LabelSet]) -> None:
+        document = {
+            "default": default,
+            "label_sets": [{"name": item.name, "labels": list(item.labels)} for item in label_sets],
+        }
+        temp_name = None
+        try:
+            # Replacing the file in one step means a failed save cannot corrupt it.
+            with tempfile.NamedTemporaryFile(
+                "w", encoding="utf-8", dir=self.path.parent, suffix=".tmp", delete=False
+            ) as temp_file:
+                temp_name = temp_file.name
+                yaml.safe_dump(document, temp_file, sort_keys=False, allow_unicode=True)
+            os.replace(temp_name, self.path)
+        except OSError:
+            if temp_name is not None:
+                Path(temp_name).unlink(missing_ok=True)
+            raise ConfigurationError(
+                f"The label set could not be saved to {self.path.name}. "
+                "Check that the file is not read-only."
+            ) from None
 
     def _load(self) -> tuple[str, list[LabelSet]]:
         file_name = self.path.name

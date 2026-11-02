@@ -37,5 +37,9 @@ class ModelOperationError(ZeroShotError):
     """A model deletion or cache cleanup could not be completed."""
 
 
+class ModelInUseError(ModelOperationError):
+    """A model cannot be changed because a download is running."""
+
+
 class StorageError(ZeroShotError):
     """A prediction could not be stored in MinIO."""

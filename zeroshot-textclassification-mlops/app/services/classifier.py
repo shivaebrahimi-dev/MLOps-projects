@@ -149,6 +149,12 @@ class Classifier:
             latency_ms=latency_ms,
         )
 
+    def unload(self, model_id: str) -> None:
+        """Release the model if it is loaded, so that its files can be deleted."""
+        with self._lock:
+            if self._loaded_model_id == model_id:
+                self._release()
+
     def _load(self, model_id: str, path: Path) -> Any:
         if self._loaded_model_id == model_id:
             return self._pipeline

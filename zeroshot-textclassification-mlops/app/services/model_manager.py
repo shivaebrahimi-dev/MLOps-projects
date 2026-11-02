@@ -17,7 +17,13 @@ from pathlib import Path
 
 import yaml
 
-from app.utils.errors import ConfigurationError, ModelDownloadError, ModelNotReadyError
+from app.utils.errors import (
+    ConfigurationError,
+    ModelDownloadError,
+    ModelInUseError,
+    ModelNotReadyError,
+    ModelOperationError,
+)
 from app.utils.logging_config import log_event
 
 logger = logging.getLogger(__name__)
@@ -39,6 +45,8 @@ DOWNLOAD_PATTERNS = (
     "merges.txt",
 )
 TEMP_DIR_NAME = ".tmp"
+# HF_HOME can also hold a saved login token, so only these download caches are cleared.
+CACHE_FOLDERS = ("hub", "xet")
 
 _MODEL_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._-]*$")
 _WINDOWS_QUERY_LIMITED_INFORMATION = 0x1000
@@ -74,6 +82,12 @@ class LocalModel:
 class DownloadOutcome:
     model: LocalModel
     already_available: bool
+
+
+@dataclass(frozen=True)
+class CacheCleanup:
+    removed_folders: tuple[str, ...]
+    freed_bytes: int
 
 
 class IncompleteDownloadError(Exception):
@@ -256,6 +270,70 @@ class ModelManager:
             duration_ms=round((time.perf_counter() - started) * 1000),
         )
         return DownloadOutcome(self.status(model_id), already_available=False)
+
+    def delete(self, model_id: str) -> None:
+        """Remove a local model. Unload it from the classifier first."""
+        config = self.get_config(model_id)
+        path = self.model_path(model_id)
+        if self._download_in_progress(model_id):
+            raise ModelInUseError(f"{config.name} is being downloaded, so it cannot be deleted.")
+        failure_record = self._temp_path(model_id, ".failed.json")
+        if not path.exists() and not failure_record.exists():
+            raise ModelOperationError(f"{config.name} is not downloaded, so nothing was deleted.")
+        try:
+            if path.exists():
+                shutil.rmtree(path)
+            failure_record.unlink(missing_ok=True)
+            self._remove_folder_if_empty(path.parent)
+        except OSError as error:
+            log_event(
+                logger,
+                "model_delete_failed",
+                level=logging.ERROR,
+                model_id=model_id,
+                error_type=type(error).__name__,
+            )
+            raise ModelOperationError(
+                f"{config.name} could not be fully deleted. Close anything using its files, "
+                "then try again."
+            ) from None
+        log_event(logger, "model_deleted", model_id=model_id)
+
+    def clear_cache(self) -> CacheCleanup:
+        """Remove Hugging Face download caches, keeping saved tokens and downloaded models."""
+        removed: list[str] = []
+        freed = 0
+        try:
+            for name in CACHE_FOLDERS:
+                folder = self.hf_home / name
+                if folder.is_dir():
+                    size = self._folder_size(folder)
+                    shutil.rmtree(folder)
+                    removed.append(name)
+                    freed += size
+        except OSError as error:
+            log_event(
+                logger,
+                "cache_cleanup_failed",
+                level=logging.ERROR,
+                removed_folders=removed,
+                error_type=type(error).__name__,
+            )
+            raise ModelOperationError(
+                "The cache could not be fully cleared. Close anything using its files, "
+                "then try again."
+            ) from None
+        log_event(logger, "cache_cleared", removed_folders=removed, freed_bytes=freed)
+        return CacheCleanup(tuple(removed), freed)
+
+    def _remove_folder_if_empty(self, folder: Path) -> None:
+        inside_model_dir = folder != self.model_dir and folder.is_relative_to(self.model_dir)
+        if inside_model_dir and folder.is_dir() and not any(folder.iterdir()):
+            folder.rmdir()
+
+    @staticmethod
+    def _folder_size(folder: Path) -> int:
+        return sum(path.stat().st_size for path in folder.rglob("*") if path.is_file())
 
     def _acquire_lock(self, config: ModelConfig) -> None:
         lock_path = self._temp_path(config.id, ".lock")

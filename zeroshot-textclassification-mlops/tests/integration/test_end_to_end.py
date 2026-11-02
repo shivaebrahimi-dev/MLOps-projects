@@ -1,11 +1,12 @@
 import json
+import shutil
 
 import pytest
 from transformers import AutoConfig, AutoTokenizer, BartForSequenceClassification
 
 from app.services.classifier import Classifier
 from app.services.minio_storage import PredictionStorage, create_client
-from app.services.model_manager import COMPLETION_MARKER, ModelConfig, ModelManager
+from app.services.model_manager import COMPLETION_MARKER, ModelConfig, ModelManager, ModelStatus
 
 pytestmark = pytest.mark.integration
 
@@ -38,6 +39,22 @@ def tiny_model_dir(tmp_path_factory):
         )
     )
     return folder
+
+
+def test_model_in_memory_can_be_unloaded_and_deleted(tiny_model_dir, tmp_path):
+    # Windows refuses to delete files a loaded model still holds open.
+    folder = tmp_path / "models"
+    shutil.copytree(tiny_model_dir, folder)
+    config = ModelConfig(TINY_MODEL_ID, "Tiny BART", "zero-shot-classification", TINY_REVISION)
+    models = ModelManager([config], folder, tmp_path / "cache")
+    classifier = Classifier(models, max_input_chars=1000)
+    classifier.classify("The team won the championship.", TINY_MODEL_ID, LABELS)
+
+    classifier.unload(TINY_MODEL_ID)
+    models.delete(TINY_MODEL_ID)
+
+    assert models.status(TINY_MODEL_ID).status is ModelStatus.NOT_DOWNLOADED
+    assert not models.model_path(TINY_MODEL_ID).exists()
 
 
 def test_text_is_classified_with_pytorch_and_stored_in_minio(
