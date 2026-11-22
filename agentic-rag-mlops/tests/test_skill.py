@@ -11,7 +11,7 @@ MIRROR = PROJECT_ROOT / ".claude" / "skills" / "rag-evaluation-report" / "SKILL.
 
 
 def frontmatter(path):
-    text = path.read_text(encoding="utf-8")
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")  # CRLF on Windows checkouts
     assert text.startswith("---\n")
     block = text.split("---\n", 2)[1]
     return yaml.safe_load(block), text
@@ -34,4 +34,4 @@ def test_skill_is_read_only_except_for_writing_the_report():
 
 
 def test_claude_code_copy_is_identical():
-    assert MIRROR.read_bytes() == PRIMARY.read_bytes()
+    assert MIRROR.read_text(encoding="utf-8") == PRIMARY.read_text(encoding="utf-8")
