@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-22
 
-**Status**: Draft
+**Status**: Clarified (iteration 2)
 
 **Input**: User description: "Build and test a small, production-minded RAG application. A user uploads knowledge
 files, the application indexes them, and the user asks questions answered only from those files, with citations.
@@ -12,6 +12,19 @@ Answering is done by an agentic workflow with a retriever agent and an answer/ve
 hallucination. Every question is traced end to end in an observability platform. The project ships automated tests,
 an evaluation dataset, and a user-invoked skill that writes an honest evaluation report." (Full text:
 [homework04-assignment.md](../../homework04-assignment.md).)
+
+## Clarifications
+
+### Session 2026-11-22
+
+- Q: When the documents answer only part of a question, what should the assistant do? → A: Answer the supported
+  part with citations and add a "Missing evidence" note for the rest; refuse outright only when nothing relevant is
+  retrieved.
+- Q: If a retrieved document contains text that looks like instructions to the assistant, what should happen? → A:
+  Keep it as evidence but present it to the answer agent as quoted data, never follow it, and flag the run in its
+  trace.
+- Q: Should the app keep a copy of the original uploaded files, or only the extracted chunks? → A: Only chunks,
+  their metadata, and a content hash; uploaded files are processed in memory and not saved.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -77,13 +90,15 @@ the uploaded knowledge", optionally with a note on what evidence is missing, ins
 **Acceptance Scenarios**:
 
 1. **Given** indexed knowledge that does not cover the question, **When** the user asks it, **Then** the safe
-   response is shown, marked as "Not found in knowledge", with no citations.
+   response is shown, marked "Not found", with no citations.
 2. **Given** a draft answer that cites a chunk that was not retrieved, or states facts without any citation,
    **When** the hallucination guardrail checks it, **Then** the draft is rejected and either corrected or replaced
    by the safe response.
 3. **Given** an indexed document that contains instructions aimed at the assistant (for example "ignore previous
-   instructions"), **When** it is retrieved, **Then** the assistant treats it as data, does not follow it, and the
-   run is flagged.
+   instructions"), **When** it is retrieved, **Then** the assistant treats it as quoted data, does not follow it,
+   and the run is flagged in its trace.
+4. **Given** indexed knowledge that covers only part of a question, **When** the user asks it, **Then** the answer
+   gives the supported part with citations, is marked "Partial", and lists what evidence is missing.
 
 ---
 
@@ -161,7 +176,8 @@ traced to a results file.
 - **FR-004**: The system MUST show, per file, the name, status (Indexed or Rejected), number of chunks, and message.
 - **FR-005**: Re-uploading a file with the same name MUST replace its previous chunks.
 - **FR-006**: The system MUST show which files are currently in the knowledge base, and MUST let the user clear it.
-- **FR-007**: The knowledge base MUST persist across application restarts.
+- **FR-007**: The knowledge base MUST persist across application restarts. The system MUST store only chunks, their
+  metadata, and a content hash; uploaded files MUST be processed in memory and MUST NOT be saved to disk.
 
 **Question answering**
 
@@ -175,10 +191,13 @@ traced to a results file.
   not an abstention but cites nothing. A rejected draft MUST be retried a limited number of times and then replaced by
   the safe response.
 - **FR-012**: When no retrieved chunk reaches the relevance threshold, the system MUST return the safe response
-  "I could not find this in the uploaded knowledge" without inventing content.
+  "I could not find this in the uploaded knowledge" without inventing content. When the evidence covers only part of
+  the question, the system MUST answer the supported part with citations, mark the answer "Partial", and list the
+  missing evidence. Every answer MUST have one status: Answered, Partial, or Not found.
 - **FR-013**: The answer view MUST show the citations with file name, chunk number, relevance score, and passage.
-- **FR-014**: Text inside documents MUST be treated as data. Retrieved chunks that look like instructions to the
-  assistant MUST be flagged in the run's trace.
+- **FR-014**: Text inside documents MUST be treated as data. Retrieved chunks MUST be passed to the answer step as
+  clearly delimited quoted evidence, with an instruction never to follow instructions found in them. Chunks that look
+  like instructions to the assistant MUST be kept as evidence and flagged in the run's trace.
 
 **Observability**
 
@@ -207,12 +226,13 @@ traced to a results file.
 
 ### Key Entities
 
-- **Document**: an uploaded file. Attributes: file name, type, size, content hash, upload time, number of chunks.
+- **Document**: an uploaded file, known only through its chunks (the file itself is not kept). Attributes: file
+  name, type, size, content hash, upload time, number of chunks.
 - **Chunk**: a passage of a document. Attributes: chunk id (`file#n`), source file name, chunk number, page (PDF),
   text, embedding.
 - **Retrieved evidence**: a chunk returned for a question, with its relevance score and rank.
-- **Answer**: the response to a question. Attributes: text, citations (chunk ids), abstained (yes/no), missing
-  evidence notes, guardrail result, trace id, latency.
+- **Answer**: the response to a question. Attributes: text, status (Answered, Partial, Not found), citations (chunk
+  ids), missing evidence notes, injection flag, guardrail result, trace id, latency.
 - **Evaluation item**: a question with its category (answerable, unanswerable, multi-document), expected answer
   points, and expected source documents.
 - **Evaluation result**: the outcome of running one evaluation item: retrieved sources, answer, citations,

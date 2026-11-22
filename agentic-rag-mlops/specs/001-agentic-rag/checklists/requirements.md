@@ -36,3 +36,4 @@
   named because the assignment fixes them as user-visible requirements, not as implementation choices.
 - Frameworks (CrewAI, Langfuse, ChromaDB, Streamlit, OpenAI) are deliberately kept out of the spec and are decided in
   `plan.md`.
+- Iteration 2 (2026-11-22, after `/speckit-clarify`): all items still pass; three clarifications integrated (partial answers, prompt-injection handling, no storage of original files).
