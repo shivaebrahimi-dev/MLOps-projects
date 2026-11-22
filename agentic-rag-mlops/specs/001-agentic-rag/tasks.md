@@ -27,13 +27,13 @@ implementation task in each story.
 
 ## Phase 2: Foundational (blocks every user story)
 
-- [ ] T005 Implement `Settings` in `app/config.py`: `.env` loading, empty value means default, no key ever in `repr` (Principle VI)
-- [ ] T006 [P] Implement the exception types in `app/errors.py` (`UploadRejected` with a reason)
-- [ ] T007 [P] Implement the models in `app/models.py` from [data-model.md](data-model.md) (`Chunk`, `RetrievedChunk`, `IngestResult`, `AnswerDraft`, `AnswerResult`, `SAFE_ANSWER`)
-- [ ] T008 [P] Implement the `Embedder` protocol, `OpenAIEmbedder`, and `HashEmbedder` in `app/embeddings.py`
-- [ ] T009 Implement `KnowledgeBase` in `app/knowledge_base.py`: upsert, delete by source, list sources, clear, query; cosine space; Chroma telemetry off; if the store folder disappears, recreate the collection and report an empty knowledge base instead of crashing (analysis A6)
-- [ ] T010 Implement `NoopTracer` and the `Tracer` interface in `app/observability.py`, so other modules can depend on it before Langfuse is wired
-- [ ] T011 [P] Add `tests/conftest.py`: env isolation (no real keys, tracing off), a temporary knowledge base with `HashEmbedder`; copy `tests/stub_llm.py` from the CrewAI skill
+- [x] T005 Implement `Settings` in `app/config.py`: `.env` loading, empty value means default, no key ever in `repr` (Principle VI)
+- [x] T006 [P] Implement the exception types in `app/errors.py` (`UploadRejected` with a reason)
+- [x] T007 [P] Implement the models in `app/models.py` from [data-model.md](data-model.md) (`Chunk`, `RetrievedChunk`, `IngestResult`, `AnswerDraft`, `AnswerResult`, `SAFE_ANSWER`)
+- [x] T008 [P] Implement the `Embedder` protocol, `OpenAIEmbedder`, and `HashEmbedder` in `app/embeddings.py`
+- [x] T009 Implement `KnowledgeBase` in `app/knowledge_base.py`: upsert, delete by source, list sources, clear, query; cosine space; Chroma telemetry off; if the store folder disappears, recreate the collection and report an empty knowledge base instead of crashing (analysis A6)
+- [x] T010 Implement `NoopTracer` and the `Tracer` interface in `app/observability.py`, so other modules can depend on it before Langfuse is wired
+- [x] T011 [P] Add `tests/conftest.py`: env isolation (no real keys, tracing off), a temporary knowledge base with `HashEmbedder`; copy `tests/stub_llm.py` from the CrewAI skill
 
 **Checkpoint**: settings, storage, and test fixtures exist.
 
@@ -43,10 +43,10 @@ implementation task in each story.
 
 **Independent Test**: `pytest tests/test_validation.py tests/test_chunking.py`, then manual scenarios M1–M3 in [quickstart.md](quickstart.md).
 
-- [ ] T012 [P] [US1] Tests in `tests/test_validation.py`: unsupported type, empty file, whitespace-only file, PDF without text, oversized file, valid txt/md/pdf (FR-001, FR-002)
-- [ ] T013 [P] [US1] Tests in `tests/test_chunking.py`: chunk size and overlap, ids `file#n`, PDF page numbers, source metadata preserved, re-upload replaces (FR-003, FR-005), two files with the same name in one upload: the later one wins and its message says so (analysis A1)
-- [ ] T014 [US1] Implement `validate_upload`, `extract_text`, `chunk_text`, `ingest_files` in `app/ingestion.py`, processing in memory only (FR-007), including the same-name-in-one-upload rule (analysis A1)
-- [ ] T015 [US1] Wrap ingestion in an `ingest` span through the tracer interface
+- [x] T012 [P] [US1] Tests in `tests/test_validation.py`: unsupported type, empty file, whitespace-only file, PDF without text, oversized file, valid txt/md/pdf (FR-001, FR-002)
+- [x] T013 [P] [US1] Tests in `tests/test_chunking.py`: chunk size and overlap, ids `file#n`, PDF page numbers, source metadata preserved, re-upload replaces (FR-003, FR-005), two files with the same name in one upload: the later one wins and its message says so (analysis A1)
+- [x] T014 [US1] Implement `validate_upload`, `extract_text`, `chunk_text`, `ingest_files` in `app/ingestion.py`, processing in memory only (FR-007), including the same-name-in-one-upload rule (analysis A1)
+- [x] T015 [US1] Wrap ingestion in an `ingest` span through the tracer interface
 
 **Checkpoint**: files can be indexed from Python.
 
