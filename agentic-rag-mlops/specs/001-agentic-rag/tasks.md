@@ -112,14 +112,14 @@ implementation task in each story.
 
 - [x] T039 [US5] Write `.agents/skills/rag-evaluation-report/SKILL.md` (frontmatter `name`, `description`, `user-invocable: true`, `disable-model-invocation: true`): inputs, the metric catalogue based on Homework 3, measured/unavailable rules, report template, privacy rules (FR-023)
 - [x] T040 [US5] Mirror the skill to `.claude/skills/rag-evaluation-report/SKILL.md` and add a test that the frontmatter is the same in both and has the required values
-- [ ] T041 [US5] The user runs the evaluation and invokes the skill; commit `reports/rag-evaluation-report.md`
+- [x] T041 [US5] The user runs the evaluation and invokes the skill; commit `reports/rag-evaluation-report.md`
 
 ## Phase 10: Polish and submission
 
-- [ ] T042 Write `README.md`: setup (uv/pip, OpenAI, Langfuse Cloud keys, confirming traces arrive), running the UI, tests, manual procedure, architecture, skills, evaluation, security notes
+- [x] T042 Write `README.md`: setup (uv/pip, OpenAI, Langfuse Cloud keys, confirming traces arrive), running the UI, tests, manual procedure, architecture, skills, evaluation, security notes
 - [x] T043 Save the `pytest` output to `reports/test-results.txt`; `ruff check .` clean
 - [x] T044 Add the Langfuse trace screenshot (or trace id) to `reports/` and link it from the README
-- [ ] T045 Add the project to the root `README.md`; scan for secrets and personal data; build the ZIP with `git archive`
+- [x] T045 Add the project to the root `README.md`; scan for secrets and personal data; build the ZIP with `git archive`
 
 ## Dependencies and execution order
 
