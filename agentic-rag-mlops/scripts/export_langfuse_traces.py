@@ -102,6 +102,9 @@ def summarise_trace(trace_id: str, observations: list[Any]) -> dict[str, Any]:
         "has_retriever_observation": names.get("retrieve", 0) > 0,
         "has_guardrail_observation": names.get("citation-guardrail", 0) > 0,
         "generation_count": len(generations),
+        # CrewAI also calls OpenAI's token-counting endpoint; those appear as generations without
+        # usage. LLM calls = generations that report token usage.
+        "llm_calls_with_usage": sum(bool(_get(g, "usage_details")) for g in generations),
         "models": sorted({str(_get(g, "model")) for g in generations if _get(g, "model")}),
         "usage_details": dict(usage),
         "tokens_reported": bool(usage),
@@ -137,7 +140,7 @@ def aggregate(traces: list[dict[str, Any]]) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Export Langfuse trace summaries.")
     parser.add_argument("--trace-id", nargs="*", help="trace ids (default: latest eval run)")
-    parser.add_argument("--wait", type=float, default=20, help="seconds to wait for ingestion")
+    parser.add_argument("--wait", type=float, default=60, help="seconds to wait for ingestion")
     args = parser.parse_args()
 
     settings = get_settings()
@@ -167,8 +170,13 @@ def main() -> int:
         tracing_enabled=False,
     )
 
+    # Langfuse ingests events asynchronously, so a fresh trace can be returned half-processed.
+    # Accept a trace only when it has its root observation and its observation count is the same
+    # in two fetches a few seconds apart; otherwise keep polling until --wait runs out.
     traces, missing = [], []
     deadline = time.monotonic() + args.wait
+    last_count: dict[str, int] = {}
+    latest: dict[str, list[Any]] = {}
     pending = list(trace_ids)
     while pending:
         still = []
@@ -178,16 +186,25 @@ def main() -> int:
             except Exception as exc:  # noqa: BLE001
                 missing.append({"trace_id": tid, "reason": safe_error_message(exc)})
                 continue
-            if observations:
+            has_root = any(not _get(o, "parent_observation_id") for o in observations)
+            stable = observations and has_root and last_count.get(tid) == len(observations)
+            if stable:
                 traces.append(summarise_trace(tid, observations))
             else:
+                last_count[tid], latest[tid] = len(observations), observations
                 still.append(tid)
         if still and time.monotonic() < deadline:
-            time.sleep(5)  # Langfuse processes ingested events asynchronously
+            time.sleep(5)
             pending = still
-        else:
-            missing.extend({"trace_id": t, "reason": "no observations returned"} for t in still)
-            pending = []
+            continue
+        for tid in still:
+            if latest.get(tid):
+                summary = summarise_trace(tid, latest[tid])
+                summary["possibly_incomplete"] = True  # still changing when --wait ran out
+                traces.append(summary)
+            else:
+                missing.append({"trace_id": tid, "reason": "no observations returned"})
+        pending = []
 
     summary = {
         "source": "Langfuse Observations API v2 (langfuse Python SDK 5.2.0)",

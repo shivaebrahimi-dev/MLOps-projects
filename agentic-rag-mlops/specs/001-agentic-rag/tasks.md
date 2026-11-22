@@ -117,7 +117,7 @@ implementation task in each story.
 ## Phase 10: Polish and submission
 
 - [ ] T042 Write `README.md`: setup (uv/pip, OpenAI, Langfuse Cloud keys, confirming traces arrive), running the UI, tests, manual procedure, architecture, skills, evaluation, security notes
-- [ ] T043 Save the `pytest` output to `reports/test-results.txt`; `ruff check .` clean
+- [x] T043 Save the `pytest` output to `reports/test-results.txt`; `ruff check .` clean
 - [ ] T044 Add the Langfuse trace screenshot (or trace id) to `reports/` and link it from the README
 - [ ] T045 Add the project to the root `README.md`; scan for secrets and personal data; build the ZIP with `git archive`
 

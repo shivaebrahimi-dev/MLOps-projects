@@ -25,10 +25,13 @@ def configure_runtime(settings: Settings) -> None:
     """
     os.environ.setdefault("CREWAI_DISABLE_TELEMETRY", "true")
     os.environ.setdefault("CREWAI_TRACING_ENABLED", "false")
+    # Third-party libraries (CrewAI logs through the root logger) only show warnings; this
+    # project's own modules log at LOG_LEVEL.
     logging.basicConfig(
-        level=settings.log_level.upper(),
+        level=logging.WARNING,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
+    logging.getLogger("app").setLevel(settings.log_level.upper())
     # Third-party request logs can include full URLs; keep them quiet.
     for noisy in ("httpx", "openai", "chromadb", "urllib3"):
         logging.getLogger(noisy).setLevel(logging.WARNING)

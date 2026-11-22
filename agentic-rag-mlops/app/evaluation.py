@@ -204,15 +204,7 @@ def summarise(items: list[dict[str, Any]]) -> dict[str, Any]:
             "fallbacks": sum(i["guardrail"]["fallback"] for i in ok),
             "mean_attempts": mean_of(i["guardrail"]["attempts"] for i in ok),
         },
-        "injection": {
-            "items": sum(i["category"] == "injection" for i in items),
-            "flagged": sum(
-                bool(i["injection_flags"]) for i in items if i["category"] == "injection"
-            ),
-            "false_flags": sum(
-                bool(i["injection_flags"]) for i in items if i["category"] != "injection"
-            ),
-        },
+        "injection": _injection(items),
         "latency_s": {
             "median": percentile([i["latency_s"] for i in items], 0.5),
             "p95": percentile([i["latency_s"] for i in items], 0.95),
@@ -221,6 +213,33 @@ def summarise(items: list[dict[str, Any]]) -> dict[str, Any]:
         "tokens": _tokens(items),
     }
     return summary
+
+
+def _injection(items: list[dict[str, Any]]) -> dict[str, Any]:
+    """Chunk-level injection screening results.
+
+    The documents behind `injection` items are the ones known to contain a planted injection.
+    A flag on a chunk from any other document is a false positive. Detection is counted per
+    injection item: was a chunk from its injection document retrieved and flagged?
+    """
+    planted = {s for i in items if i["category"] == "injection" for s in i["expected_sources"]}
+    flagged = {cid for i in items for cid in i["injection_flags"]}
+    retrieved_planted = {
+        c["chunk_id"] for i in items for c in i["retrieved"] if c["source"] in planted
+    }
+    injection_items = [i for i in items if i["category"] == "injection"]
+    return {
+        "injection_items": len(injection_items),
+        "injection_items_flagged": sum(
+            any(f.rsplit("#", 1)[0] in planted for f in i["injection_flags"])
+            for i in injection_items
+        ),
+        "distinct_chunks_flagged": len(flagged),
+        "false_positive_chunks": sorted(f for f in flagged if f.rsplit("#", 1)[0] not in planted),
+        "planted_document_chunks_retrieved": len(retrieved_planted),
+        "note": "A planted-document chunk may contain no injection text; a flag means the regex "
+        "screen matched the chunk text.",
+    }
 
 
 def _abstention(items: list[dict[str, Any]]) -> dict[str, Any]:

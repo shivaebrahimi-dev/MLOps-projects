@@ -62,8 +62,8 @@ decisions and the API facts they were checked against are in
 ### Prerequisites
 
 - Python 3.12, and [uv](https://docs.astral.sh/uv/) (recommended) or pip
-- An **OpenAI API key** with a little credit. The default model is `gpt-4o-mini`; the full evaluation run of 8
-  questions costs well under US$0.10.
+- An **OpenAI API key** with a little credit. The default model is `gpt-4o-mini`; one full evaluation run of 8
+  questions cost US$0.002 (16,147 tokens, measured in Langfuse).
 - A free **Langfuse Cloud** account (optional, but needed for traces)
 
 The commands are for PowerShell on Windows. On macOS or Linux, use `cp` instead of `Copy-Item` and
@@ -126,8 +126,8 @@ The app opens at <http://localhost:8501>. The caption under the title should say
 1. **Knowledge** tab → browse → select all five files in [data/sample-knowledge/](data/sample-knowledge/) → **Index
    files**. Expected: five ✅ Indexed rows and "Indexed 5 file(s), … chunk(s)".
 2. **Ask** tab → `Which MinIO bucket stores the Fashion-MNIST model files?` → **Ask**.
-   Expected: a status box "Agents are working…", then **Answered** with a citation such as
-   `[fashion-mnist-pipeline.md#5]`. The **Sources** expanders show the passages.
+   Expected: a status box "Agents are working…", then **Answered** (`fashion-minst-bucket`) with a citation such as
+   `[fashion-mnist-pipeline.md#n]`. The **Sources** expanders show the passages.
 3. Open **Run details** to see the Langfuse trace id and a link to the trace.
 
 ## Langfuse: configure and confirm traces
