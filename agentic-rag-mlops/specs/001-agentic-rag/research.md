@@ -87,6 +87,11 @@ then from the installed SDK's signatures.
   A second guardrail on the retriever task requires that the search tool was actually called. After
   `guardrail_max_retries` (2) failed attempts, the app catches the error and shows the safe answer with
   `guardrail_failed=true` in the trace.
+- **Finding during implementation (2026-11-22)**: on a guardrail retry, CrewAI 1.15.44
+  (`Task._invoke_guardrail_function`) calls the agent again with **only** the validation error as context. The
+  retriever task's evidence is dropped, so without a fix the agent would retry with no evidence. The feedback
+  returned by our guardrail therefore repeats the evidence blocks. `test_guardrail_feedback_lets_the_agent_fix_its_answer`
+  covers this case.
 - **Rationale**: Deterministic, cheap, and testable. It enforces Constitution I in code, not only in the prompt.
 - **Alternatives**: A string (LLM-judged) guardrail, which costs an extra model call and is not deterministic. It is
   listed as a next experiment in the evaluation report.

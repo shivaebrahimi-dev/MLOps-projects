@@ -1,0 +1,51 @@
+ZERO-SHOT TEXT CLASSIFICATION PLATFORM (HOMEWORK 2)
+
+Purpose
+
+The second course project classifies text into labels chosen at request time, without training a model. An
+administrator manages Hugging Face models and label sets, a user submits text and reads ranked results, and every
+successful result is saved as JSON in MinIO. The project was built specification-first with Spec Kit.
+
+Supported models
+
+Two zero-shot models are supported. "DeBERTa Zero-Shot v2" (MoritzLaurer/deberta-v3-base-zeroshot-v2.0) has about
+369 MB of weights. "BART MNLI" (facebook/bart-large-mnli) has about 1.63 GB of weights. Each model is pinned to an
+exact revision in configs/models.yaml, and a new model can be added there without changing code. Only one model stays
+in memory at a time.
+
+Measured speed on a CPU during development: the first DeBERTa request took about 8 seconds because the model had to
+load, later DeBERTa requests took 2 to 3 seconds, and BART took about 0.6 seconds per request after loading.
+
+Model download and status
+
+A download follows a safe order so that an interrupted download can never look ready. A lock file prevents a second
+download of the same model. The pinned revision is downloaded into a temporary folder under models/.tmp/, the
+required files are checked, a completion marker named .download-complete.json is written, and only then is the folder
+renamed to models/{org}/{name}.
+
+A model has one of four statuses: Not downloaded, Downloading, Ready (the folder, its completion marker and its
+required files all exist), or Failed (the last download failed or the local copy is incomplete).
+
+Candidate labels
+
+Label sets are stored in configs/labels.yaml and edited on the Admin page. A label set needs at least two labels.
+Empty labels and duplicates are rejected, and labels that differ only by letter case or surrounding spaces count as
+duplicates. Control characters are removed from labels and from input text.
+
+Storage of results in MinIO
+
+The default bucket is zeroshot-learning-output, and the application creates it when the first result is saved. Each
+successful classification is stored as one JSON object at predictions/YYYY/MM/DD/{request_id}.json, where the date is
+the UTC date of the prediction. A record contains the request id, timestamp, input text, predicted class, confidence,
+candidate labels, ranked predictions, model name and revision, application version, session id and latency in
+milliseconds.
+
+If MinIO is unavailable, the user still sees the result together with a clear error saying it was not saved. Nothing
+is written to local files instead, because MinIO is the system of record.
+
+Architecture
+
+The Streamlit pages only handle the interface; a test fails if a service module imports Streamlit. The services are
+ModelManager (download, status, deletion, cache cleanup), LabelManager (label validation and persistence), Classifier
+(input validation and inference) and PredictionStorage, which is the only code that talks to MinIO. Logs are
+structured JSON and contain no secrets and no input text.

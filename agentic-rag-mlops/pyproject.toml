@@ -31,7 +31,16 @@ extend-exclude = [".specify", ".claude", ".agents", "specs", "tests/stub_llm.py"
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 
+[tool.ruff.lint.per-file-ignores]
+# Prose content of the sample PDF.
+"scripts/make_sample_pdf.py" = ["E501"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
 markers = ["live: calls real OpenAI and Langfuse; skipped unless RUN_LIVE_TESTS=1"]
+filterwarnings = [
+    # Raised inside crewai itself, not by this project.
+    "ignore::DeprecationWarning:crewai.*",
+    "ignore::DeprecationWarning:pydantic.*",
+]
