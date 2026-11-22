@@ -1,8 +1,8 @@
 {
   "source": "Langfuse Observations API v2 (langfuse Python SDK 5.2.0)",
   "langfuse_base_url": "https://us.cloud.langfuse.com",
-  "fetched_at": "2026-11-22T18:38:11+00:00",
-  "evaluation_run_id": "eval-20261122-183719-9fbcef",
+  "fetched_at": "2026-11-22T19:17:40+00:00",
+  "evaluation_run_id": "eval-20261122-191648-447fd1",
   "requested": 8,
   "aggregate": {
     "traces": 8,
@@ -12,22 +12,22 @@
     "with_token_usage": 8,
     "with_model_name": 8,
     "latency_s": {
-      "median": 3.962,
-      "max": 4.741
+      "median": 4.119,
+      "max": 4.854
     },
-    "total_tokens": 16147,
-    "total_cost_usd": 0.002056,
+    "total_tokens": 18371,
+    "total_cost_usd": 0.00246,
     "models": [
       "gpt-4o-mini-2024-07-18"
     ]
   },
   "traces": [
     {
-      "trace_id": "1b6589d23d28626f028f741bbbf20607",
+      "trace_id": "d8f1cf20fae14c4f1a94f9920fb4188f",
       "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:21.395000+00:00",
-      "root_latency_s": 4.013,
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:16:50.545000+00:00",
+      "root_latency_s": 4.039,
       "observation_count": 12,
       "observations_by_type": {
         "GUARDRAIL": 1,
@@ -46,33 +46,33 @@
         },
         "GENERATION": {
           "n": 4,
-          "total": 2.954,
-          "max": 1.5
+          "total": 3.021,
+          "max": 1.524
         },
         "AGENT": {
           "n": 3,
-          "total": 7.304,
-          "max": 4.013
+          "total": 7.388,
+          "max": 4.039
         },
         "EMBEDDING": {
           "n": 1,
-          "total": 0.251,
-          "max": 0.251
+          "total": 0.245,
+          "max": 0.245
         },
         "RETRIEVER": {
           "n": 1,
-          "total": 0.254,
-          "max": 0.254
+          "total": 0.248,
+          "max": 0.248
         },
         "TOOL": {
           "n": 1,
-          "total": 0.255,
-          "max": 0.255
+          "total": 0.248,
+          "max": 0.248
         },
         "CHAIN": {
           "n": 1,
-          "total": 3.321,
-          "max": 3.321
+          "total": 3.379,
+          "max": 3.379
         }
       },
       "levels": {
@@ -88,24 +88,24 @@
       ],
       "usage_details": {
         "prompt_details.audio": 0,
-        "input": 386,
-        "output": 104,
-        "total": 2154,
-        "input_cached_tokens": 1664,
+        "input": 418,
+        "output": 105,
+        "total": 2571,
+        "input_cached_tokens": 2048,
         "output_reasoning_tokens": 0,
         "output_audio_tokens": 0
       },
       "tokens_reported": true,
       "model_reported": true,
-      "total_cost_usd": 0.000245,
+      "total_cost_usd": 0.000279,
       "cost_reported": true
     },
     {
-      "trace_id": "5d42962a4fe3cc0e16499d4ad8ac6c5f",
+      "trace_id": "6f4c46097c2dcaf2546d92bea84861f1",
       "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:25.764000+00:00",
-      "root_latency_s": 4.093,
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:16:54.959000+00:00",
+      "root_latency_s": 4.041,
       "observation_count": 12,
       "observations_by_type": {
         "GUARDRAIL": 1,
@@ -119,38 +119,38 @@
       "step_latency_s_by_type": {
         "GUARDRAIL": {
           "n": 1,
-          "total": 0.001,
-          "max": 0.001
+          "total": 0.0,
+          "max": 0.0
         },
         "GENERATION": {
           "n": 4,
-          "total": 3.202,
-          "max": 1.834
+          "total": 3.197,
+          "max": 1.983
         },
         "AGENT": {
           "n": 3,
-          "total": 7.61,
-          "max": 4.093
+          "total": 7.496,
+          "max": 4.041
         },
         "EMBEDDING": {
           "n": 1,
-          "total": 0.283,
-          "max": 0.283
+          "total": 0.229,
+          "max": 0.229
         },
         "RETRIEVER": {
           "n": 1,
-          "total": 0.286,
-          "max": 0.286
+          "total": 0.231,
+          "max": 0.231
         },
         "TOOL": {
           "n": 1,
-          "total": 0.287,
-          "max": 0.287
+          "total": 0.232,
+          "max": 0.232
         },
         "CHAIN": {
           "n": 1,
-          "total": 3.539,
-          "max": 3.539
+          "total": 3.478,
+          "max": 3.478
         }
       },
       "levels": {
@@ -166,24 +166,24 @@
       ],
       "usage_details": {
         "prompt_details.audio": 0,
-        "input": 323,
+        "input": 303,
         "output": 162,
-        "total": 2149,
-        "input_cached_tokens": 1664,
+        "total": 2513,
+        "input_cached_tokens": 2048,
         "output_reasoning_tokens": 0,
         "output_audio_tokens": 0
       },
       "tokens_reported": true,
       "model_reported": true,
-      "total_cost_usd": 0.00027,
+      "total_cost_usd": 0.000296,
       "cost_reported": true
     },
     {
-      "trace_id": "76e370e29124fcd6f8ca63a134192378",
+      "trace_id": "860397bfbcbabf25f5cae8ee1648901b",
       "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:30.013000+00:00",
-      "root_latency_s": 4.004,
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:16:59.139000+00:00",
+      "root_latency_s": 4.479,
       "observation_count": 12,
       "observations_by_type": {
         "GUARDRAIL": 1,
@@ -202,33 +202,33 @@
         },
         "GENERATION": {
           "n": 4,
-          "total": 3.108,
-          "max": 1.889
+          "total": 3.513,
+          "max": 2.086
         },
         "AGENT": {
           "n": 3,
-          "total": 7.38,
-          "max": 4.004
+          "total": 8.356,
+          "max": 4.479
         },
         "EMBEDDING": {
           "n": 1,
-          "total": 0.236,
-          "max": 0.236
+          "total": 0.332,
+          "max": 0.332
         },
         "RETRIEVER": {
           "n": 1,
-          "total": 0.239,
-          "max": 0.239
+          "total": 0.334,
+          "max": 0.334
         },
         "TOOL": {
           "n": 1,
-          "total": 0.24,
-          "max": 0.24
+          "total": 0.336,
+          "max": 0.336
         },
         "CHAIN": {
           "n": 1,
-          "total": 3.401,
-          "max": 3.401
+          "total": 3.902,
+          "max": 3.902
         }
       },
       "levels": {
@@ -244,24 +244,24 @@
       ],
       "usage_details": {
         "prompt_details.audio": 0,
-        "input": 415,
-        "output": 165,
-        "total": 2244,
-        "input_cached_tokens": 1664,
+        "input": 1432,
+        "output": 145,
+        "total": 2601,
+        "input_cached_tokens": 1024,
         "output_reasoning_tokens": 0,
         "output_audio_tokens": 0
       },
       "tokens_reported": true,
       "model_reported": true,
-      "total_cost_usd": 0.000286,
+      "total_cost_usd": 0.000379,
       "cost_reported": true
     },
     {
-      "trace_id": "c6d6133c7d06a27d806bd5ab841dca76",
+      "trace_id": "5771c741d2f51d48ba6caeb0f9aa5195",
       "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:34.169000+00:00",
-      "root_latency_s": 3.43,
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:17:03.764000+00:00",
+      "root_latency_s": 4.197,
       "observation_count": 12,
       "observations_by_type": {
         "GUARDRAIL": 1,
@@ -275,38 +275,38 @@
       "step_latency_s_by_type": {
         "GUARDRAIL": {
           "n": 1,
-          "total": 0.001,
-          "max": 0.001
+          "total": 0.0,
+          "max": 0.0
         },
         "GENERATION": {
           "n": 4,
-          "total": 2.533,
-          "max": 1.191
+          "total": 3.313,
+          "max": 1.938
         },
         "AGENT": {
           "n": 3,
-          "total": 6.242,
-          "max": 3.43
+          "total": 7.781,
+          "max": 4.197
         },
         "EMBEDDING": {
           "n": 1,
-          "total": 0.25,
-          "max": 0.25
+          "total": 0.241,
+          "max": 0.241
         },
         "RETRIEVER": {
           "n": 1,
-          "total": 0.253,
-          "max": 0.253
+          "total": 0.244,
+          "max": 0.244
         },
         "TOOL": {
           "n": 1,
-          "total": 0.254,
-          "max": 0.254
+          "total": 0.245,
+          "max": 0.245
         },
         "CHAIN": {
           "n": 1,
-          "total": 2.834,
-          "max": 2.834
+          "total": 3.607,
+          "max": 3.607
         }
       },
       "levels": {
@@ -322,24 +322,24 @@
       ],
       "usage_details": {
         "prompt_details.audio": 0,
-        "input": 407,
-        "output": 93,
-        "total": 2164,
-        "input_cached_tokens": 1664,
+        "input": 357,
+        "output": 155,
+        "total": 2560,
+        "input_cached_tokens": 2048,
         "output_reasoning_tokens": 0,
         "output_audio_tokens": 0
       },
       "tokens_reported": true,
       "model_reported": true,
-      "total_cost_usd": 0.000242,
+      "total_cost_usd": 0.0003,
       "cost_reported": true
     },
     {
-      "trace_id": "4280c83c57729f62c6b3d101dc77ee36",
+      "trace_id": "79737bf3cd75e1fb6ec6fb2996755e7c",
       "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:37.747000+00:00",
-      "root_latency_s": 2.846,
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:17:08.114000+00:00",
+      "root_latency_s": 3.141,
       "observation_count": 12,
       "observations_by_type": {
         "GUARDRAIL": 1,
@@ -353,38 +353,38 @@
       "step_latency_s_by_type": {
         "GUARDRAIL": {
           "n": 1,
-          "total": 0.001,
-          "max": 0.001
+          "total": 0.0,
+          "max": 0.0
         },
         "GENERATION": {
           "n": 4,
-          "total": 1.935,
-          "max": 0.741
+          "total": 2.192,
+          "max": 0.866
         },
         "AGENT": {
           "n": 3,
-          "total": 5.089,
-          "max": 2.846
+          "total": 5.688,
+          "max": 3.141
         },
         "EMBEDDING": {
           "n": 1,
-          "total": 0.28,
-          "max": 0.28
+          "total": 0.323,
+          "max": 0.323
         },
         "RETRIEVER": {
           "n": 1,
-          "total": 0.282,
-          "max": 0.282
+          "total": 0.326,
+          "max": 0.326
         },
         "TOOL": {
           "n": 1,
-          "total": 0.282,
-          "max": 0.282
+          "total": 0.327,
+          "max": 0.327
         },
         "CHAIN": {
           "n": 1,
-          "total": 2.266,
-          "max": 2.266
+          "total": 2.568,
+          "max": 2.568
         }
       },
       "levels": {
@@ -414,89 +414,11 @@
       "cost_reported": true
     },
     {
-      "trace_id": "d07e5659ca3dd782150e334342a4c1c9",
+      "trace_id": "b9fecd384f7083b16499e4cd6b103990",
       "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:40.747000+00:00",
-      "root_latency_s": 3.884,
-      "observation_count": 12,
-      "observations_by_type": {
-        "GUARDRAIL": 1,
-        "GENERATION": 4,
-        "AGENT": 3,
-        "EMBEDDING": 1,
-        "RETRIEVER": 1,
-        "TOOL": 1,
-        "CHAIN": 1
-      },
-      "step_latency_s_by_type": {
-        "GUARDRAIL": {
-          "n": 1,
-          "total": 0.001,
-          "max": 0.001
-        },
-        "GENERATION": {
-          "n": 4,
-          "total": 3.033,
-          "max": 1.579
-        },
-        "AGENT": {
-          "n": 3,
-          "total": 7.177,
-          "max": 3.884
-        },
-        "EMBEDDING": {
-          "n": 1,
-          "total": 0.227,
-          "max": 0.227
-        },
-        "RETRIEVER": {
-          "n": 1,
-          "total": 0.23,
-          "max": 0.23
-        },
-        "TOOL": {
-          "n": 1,
-          "total": 0.234,
-          "max": 0.234
-        },
-        "CHAIN": {
-          "n": 1,
-          "total": 3.314,
-          "max": 3.314
-        }
-      },
-      "levels": {
-        "DEFAULT": 12
-      },
-      "error_messages": [],
-      "has_retriever_observation": true,
-      "has_guardrail_observation": true,
-      "generation_count": 4,
-      "llm_calls_with_usage": 2,
-      "models": [
-        "gpt-4o-mini-2024-07-18"
-      ],
-      "usage_details": {
-        "prompt_details.audio": 0,
-        "input": 382,
-        "output": 128,
-        "total": 2174,
-        "input_cached_tokens": 1664,
-        "output_reasoning_tokens": 0,
-        "output_audio_tokens": 0
-      },
-      "tokens_reported": true,
-      "model_reported": true,
-      "total_cost_usd": 0.000259,
-      "cost_reported": true
-    },
-    {
-      "trace_id": "880f654b7c8af6784e1a95ab0025f82d",
-      "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:44.777000+00:00",
-      "root_latency_s": 3.921,
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:17:11.394000+00:00",
+      "root_latency_s": 4.384,
       "observation_count": 12,
       "observations_by_type": {
         "GUARDRAIL": 1,
@@ -515,33 +437,111 @@
         },
         "GENERATION": {
           "n": 4,
-          "total": 3.054,
-          "max": 1.542
+          "total": 3.435,
+          "max": 1.457
         },
         "AGENT": {
           "n": 3,
-          "total": 7.22,
-          "max": 3.921
+          "total": 8.169,
+          "max": 4.384
         },
         "EMBEDDING": {
           "n": 1,
-          "total": 0.215,
-          "max": 0.215
+          "total": 0.314,
+          "max": 0.314
         },
         "RETRIEVER": {
           "n": 1,
-          "total": 0.218,
-          "max": 0.218
+          "total": 0.317,
+          "max": 0.317
         },
         "TOOL": {
           "n": 1,
-          "total": 0.219,
-          "max": 0.219
+          "total": 0.321,
+          "max": 0.321
         },
         "CHAIN": {
           "n": 1,
-          "total": 3.321,
-          "max": 3.321
+          "total": 3.807,
+          "max": 3.807
+        }
+      },
+      "levels": {
+        "DEFAULT": 12
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4o-mini-2024-07-18"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 2437,
+        "output": 128,
+        "total": 2565,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.000442,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "fbb39dd48be5073fd153a9dc822e21b9",
+      "trace_name": "rag-question",
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:17:15.912000+00:00",
+      "root_latency_s": 3.849,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "TOOL": 1,
+        "RETRIEVER": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 3.007,
+          "max": 1.707
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 7.097,
+          "max": 3.849
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.211,
+          "max": 0.211
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.214,
+          "max": 0.214
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.214,
+          "max": 0.214
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 3.27,
+          "max": 3.27
         }
       },
       "levels": {
@@ -571,11 +571,11 @@
       "cost_reported": true
     },
     {
-      "trace_id": "238f3611e542a8741dacb0b01fd54601",
+      "trace_id": "356237b0128d105f4e66648a57d4430c",
       "trace_name": "rag-question",
-      "session_id": "eval-20261122-183719-9fbcef",
-      "start_time": "2026-11-22 18:37:48.875000+00:00",
-      "root_latency_s": 4.741,
+      "session_id": "eval-20261122-191648-447fd1",
+      "start_time": "2026-11-22 19:17:19.914000+00:00",
+      "root_latency_s": 4.854,
       "observation_count": 12,
       "observations_by_type": {
         "GUARDRAIL": 1,
@@ -594,33 +594,33 @@
         },
         "GENERATION": {
           "n": 4,
-          "total": 3.897,
-          "max": 2.716
+          "total": 3.965,
+          "max": 2.514
         },
         "AGENT": {
           "n": 3,
-          "total": 8.886,
-          "max": 4.741
+          "total": 9.095,
+          "max": 4.854
         },
         "EMBEDDING": {
           "n": 1,
-          "total": 0.218,
-          "max": 0.218
+          "total": 0.246,
+          "max": 0.246
         },
         "RETRIEVER": {
           "n": 1,
-          "total": 0.221,
-          "max": 0.221
+          "total": 0.248,
+          "max": 0.248
         },
         "TOOL": {
           "n": 1,
-          "total": 0.222,
-          "max": 0.222
+          "total": 0.25,
+          "max": 0.25
         },
         "CHAIN": {
           "n": 1,
-          "total": 4.17,
-          "max": 4.17
+          "total": 4.264,
+          "max": 4.264
         }
       },
       "levels": {
@@ -636,16 +636,16 @@
       ],
       "usage_details": {
         "prompt_details.audio": 0,
-        "input": 408,
-        "output": 208,
-        "total": 2280,
-        "input_cached_tokens": 1664,
+        "input": 335,
+        "output": 196,
+        "total": 2579,
+        "input_cached_tokens": 2048,
         "output_reasoning_tokens": 0,
         "output_audio_tokens": 0
       },
       "tokens_reported": true,
       "model_reported": true,
-      "total_cost_usd": 0.000311,
+      "total_cost_usd": 0.000321,
       "cost_reported": true
     }
   ],

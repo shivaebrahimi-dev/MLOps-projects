@@ -1,7 +1,64 @@
 [
   {
+    "run_id": "eval-20261122-191648-447fd1",
+    "label": "baseline (current defaults)",
+    "model": "gpt-4o-mini",
+    "top_k": 6,
+    "status_accuracy": 1.0,
+    "hit@k": 1.0,
+    "recall@k": 1.0,
+    "precision@k": 0.5476,
+    "mrr": 1.0,
+    "ndcg@k": 0.7614,
+    "citation_correctness": 0.881,
+    "citation_completeness": 0.9286,
+    "answer_point_coverage": 0.9375,
+    "guardrail_fallbacks": 0,
+    "errors": 0,
+    "median_latency_s": 4.119,
+    "total_tokens": 18371,
+    "langfuse_cost_usd": 0.00246,
+    "statuses": {
+      "q1": "answered",
+      "q2": "answered",
+      "q3": "answered",
+      "q4": "answered",
+      "q5": "not_found",
+      "q6": "partial",
+      "q7": "answered",
+      "q8": "answered"
+    },
+    "citations": {
+      "q1": [
+        "fashion-mnist-pipeline.md#0"
+      ],
+      "q2": [
+        "zero-shot-platform.txt#3"
+      ],
+      "q3": [
+        "evaluation-metrics-findings.pdf#2"
+      ],
+      "q4": [
+        "mlops-glossary.md#0",
+        "zero-shot-platform.txt#3"
+      ],
+      "q5": [],
+      "q6": [
+        "fashion-mnist-pipeline.md#1"
+      ],
+      "q7": [
+        "submission-checklist-injection-test.md#0"
+      ],
+      "q8": [
+        "fashion-mnist-pipeline.md#2",
+        "mlops-glossary.md#1",
+        "fashion-mnist-pipeline.md#5"
+      ]
+    }
+  },
+  {
     "run_id": "eval-20261122-183719-9fbcef",
-    "label": "baseline",
+    "label": "earlier baseline (top_k=4)",
     "model": "gpt-4o-mini",
     "top_k": 4,
     "status_accuracy": 0.875,
@@ -57,7 +114,7 @@
   },
   {
     "run_id": "exp-gpt41-20261122-191230-6d79d7",
-    "label": "gpt41",
+    "label": "experiment: gpt41",
     "model": "gpt-4.1",
     "top_k": 4,
     "status_accuracy": 1.0,
@@ -115,7 +172,7 @@
   },
   {
     "run_id": "exp-gpt41mini-20261122-191153-194394",
-    "label": "gpt41mini",
+    "label": "experiment: gpt41mini",
     "model": "gpt-4.1-mini",
     "top_k": 4,
     "status_accuracy": 1.0,
@@ -172,7 +229,7 @@
   },
   {
     "run_id": "exp-topk6-20261122-191301-274bc7",
-    "label": "topk6",
+    "label": "experiment: topk6",
     "model": "gpt-4o-mini",
     "top_k": 6,
     "status_accuracy": 1.0,

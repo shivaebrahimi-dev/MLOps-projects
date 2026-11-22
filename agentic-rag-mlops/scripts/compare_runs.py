@@ -19,24 +19,25 @@ RESULTS = ROOT / "evaluation" / "results"
 REPORTS = ROOT / "reports"
 
 
-def _langfuse_for(run: dict[str, Any], baseline: bool) -> dict[str, Any] | None:
-    path = (
-        REPORTS / "langfuse_traces_summary.json"
-        if baseline
-        else REPORTS / "experiments" / f"langfuse_{run['run_id']}.json"
-    )
-    if not path.exists():
-        return None
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return data if data.get("evaluation_run_id") == run["run_id"] else None
+def _langfuse_for(run: dict[str, Any]) -> dict[str, Any] | None:
+    """The Langfuse export whose evaluation_run_id matches this run, if any."""
+    for path in (
+        REPORTS / "langfuse_traces_summary.json",
+        REPORTS / "experiments" / f"langfuse_{run['run_id']}.json",
+    ):
+        if path.exists():
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if data.get("evaluation_run_id") == run["run_id"]:
+                return data
+    return None
 
 
-def row(run: dict[str, Any], baseline: bool) -> dict[str, Any]:
+def row(run: dict[str, Any], label: str) -> dict[str, Any]:
     s, m = run["summary"], run["summary"]["metrics"]
-    lf = _langfuse_for(run, baseline)
+    lf = _langfuse_for(run)
     return {
         "run_id": run["run_id"],
-        "label": "baseline" if baseline else run.get("experiment"),
+        "label": label,
         "model": run["config"]["model"],
         "top_k": run["config"]["top_k"],
         "status_accuracy": s["status_accuracy"],
@@ -63,9 +64,16 @@ def main() -> int:
     if not baseline_path.exists():
         print("No baseline: run scripts/run_evaluation.py first.")
         return 2
-    runs = [row(json.loads(baseline_path.read_text(encoding="utf-8")), baseline=True)]
+    baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+    runs = [row(baseline, "baseline (current defaults)")]
+    # Earlier baseline runs (kept as eval-*.json) show how the defaults changed over time.
+    for path in sorted(RESULTS.glob("eval-*.json")):
+        run = json.loads(path.read_text(encoding="utf-8"))
+        if run["run_id"] != baseline["run_id"]:
+            runs.append(row(run, f"earlier baseline (top_k={run['config']['top_k']})"))
     for path in sorted((RESULTS / "experiments").glob("*.json")):
-        runs.append(row(json.loads(path.read_text(encoding="utf-8")), baseline=False))
+        run = json.loads(path.read_text(encoding="utf-8"))
+        runs.append(row(run, f"experiment: {run.get('experiment')}"))
 
     (RESULTS / "comparison.json").write_text(json.dumps(runs, indent=2), encoding="utf-8")
     cols = [

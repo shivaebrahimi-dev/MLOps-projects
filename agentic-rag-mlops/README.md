@@ -309,7 +309,9 @@ uv run python scripts/compare_runs.py              # → evaluation/results/comp
 
 The committed comparison has four runs: the `gpt-4o-mini` baseline, `gpt-4.1-mini`, `gpt-4.1`, and `gpt-4o-mini` with
 `TOP_K=6`. It shows that retrieving more chunks improved citation quality more than a stronger model did, at a
-fraction of the cost. Each configuration ran once on 8 questions, so treat small differences as noise.
+fraction of the cost, so the default `TOP_K` is now 6. A re-run with the new default reproduced the same scores.
+Each configuration ran once on 8 questions, and the setting was chosen on those same questions, so treat small
+differences as noise. Costs also vary with OpenAI's automatic prompt caching.
 
 **The report.** In Claude Code opened in this folder, type `/rag-evaluation-report`. The skill writes
 [reports/rag-evaluation-report.md](reports/rag-evaluation-report.md). Every metric is labelled Measured, Derived,
@@ -349,7 +351,7 @@ All variables are optional except the keys. Empty values use these defaults (see
 | `CHROMA_DIR` | `.chroma` | Where the vector store is kept |
 | `COLLECTION_NAME` | `knowledge` | Collection name prefix |
 | `CHUNK_SIZE`, `CHUNK_OVERLAP` | `800`, `120` | Chunking, in characters |
-| `TOP_K` | `4` | Chunks retrieved per search |
+| `TOP_K` | `6` | Chunks retrieved per search. Raised from 4 after the evaluation experiment (see [Evaluation](#evaluation-and-the-evaluation-report)) |
 | `MIN_RELEVANCE` | `0.30` | Cosine similarity below which a chunk is not evidence |
 | `MAX_UPLOAD_MB` | `10` | Upload size limit |
 | `LOG_LEVEL` | `INFO` | Log level |

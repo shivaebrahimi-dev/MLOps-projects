@@ -2,4 +2,4 @@
 ..................                                                       [100%]
 =========================== short test summary info ===========================
 SKIPPED [1] tests\test_live.py:28: set RUN_LIVE_TESTS=1
-89 passed, 1 skipped in 5.76s
+89 passed, 1 skipped in 5.70s

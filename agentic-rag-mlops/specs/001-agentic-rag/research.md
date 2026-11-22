@@ -57,6 +57,12 @@ then from the installed SDK's signatures.
 - **Relevance score**: `score = 1 - cosine_distance`. A chunk counts as evidence only if `score >= MIN_RELEVANCE`
   (default 0.30, set from the evaluation run).
 - **Privacy**: Chroma is created with `Settings(anonymized_telemetry=False)`.
+- **Update after evaluation (2026-11-22)**: the default `TOP_K` changed from 4 to 6. With 4, glossary chunks pushed
+  the specific project passages out of the top results, and the answer cited the glossary (q4 and q8). Results with
+  `gpt-4o-mini`: citation correctness 0.71 → 0.88, citation completeness 0.71 → 0.93, status accuracy 0.875 → 1.0,
+  precision@k 0.64 → 0.55, cost per run $0.0021 → $0.0032. A stronger model (`gpt-4.1`, 19× the cost) reached only
+  0.76. Caveat: the setting was chosen on the same 8 questions it is evaluated on. The numbers are in
+  `evaluation/results/comparison.json`.
 - **Alternatives**: FAISS (no metadata filtering or persistence out of the box); CrewAI `knowledge_sources` (hides
   retrieval inside CrewAI, so we could not trace chunk ids and scores ourselves or control the threshold).
 

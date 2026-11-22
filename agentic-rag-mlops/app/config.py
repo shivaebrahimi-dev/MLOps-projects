@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     collection_name: str = "knowledge"
     chunk_size: int = Field(default=800, ge=100, le=4000)
     chunk_overlap: int = Field(default=120, ge=0, le=1000)
-    top_k: int = Field(default=4, ge=1, le=20)
+    top_k: int = Field(default=6, ge=1, le=20)
     min_relevance: float = Field(default=0.30, ge=-1.0, le=1.0)
     max_upload_mb: float = Field(default=10, gt=0)
 
