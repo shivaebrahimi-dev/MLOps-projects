@@ -1,0 +1,37 @@
+[project]
+name = "agentic-rag-mlops"
+version = "0.1.0"
+description = "Agentic RAG knowledge assistant with CrewAI, ChromaDB, Streamlit and Langfuse"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "crewai",
+    "langfuse",
+    "openinference-instrumentation-crewai",
+    "openinference-instrumentation-openai",
+    "openai",
+    "chromadb",
+    "pypdf",
+    "streamlit",
+    "pydantic-settings",
+    "python-dotenv",
+]
+
+[dependency-groups]
+dev = ["pytest", "ruff", "reportlab"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".specify", ".claude", ".agents", "specs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["live: calls real OpenAI and Langfuse; skipped unless RUN_LIVE_TESTS=1"]

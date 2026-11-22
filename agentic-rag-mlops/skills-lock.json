@@ -1,0 +1,82 @@
+{
+  "version": 2,
+  "skills": {
+    "ask-docs": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/ask-docs/SKILL.md",
+      "computedHash": "6b97054a4ad1672a4ec48419d3ef42a1cb83b4ca3182b576bc50816eb3efdbc3"
+    },
+    "build-flow": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/build-flow/SKILL.md",
+      "computedHash": "f322cb343519e17cc9f192ce8cc61cd55fe903d7f251a9c3789c43e3f349fefd"
+    },
+    "call-deployed-crew": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/call-deployed-crew/SKILL.md",
+      "computedHash": "4b7054425f1cb10016048ff1961ecafa29115f567791dcc751f37458d452867a"
+    },
+    "check-crewai-api": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/check-crewai-api/SKILL.md",
+      "computedHash": "9d138989eaf1006ea1fe0e651031b7fd1c54eae17da68c1a2c9dfa8c60119c59"
+    },
+    "connect-tools-and-mcp": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/connect-tools-and-mcp/SKILL.md",
+      "computedHash": "cfcbb6880fc3877be7a64f7c8b674fcf030304e71d6f0a0e9809c9c6eaf7162d"
+    },
+    "deploy-to-amp": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/deploy-to-amp/SKILL.md",
+      "computedHash": "5ec0bdbbe70e5c243538441d73c6d5fb360ca4c652d680b823cbd91ce3527c96"
+    },
+    "design-agent": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/design-agent/SKILL.md",
+      "computedHash": "4a42049ef8ade0de44286f5f3b4237d57deecd4082d40f860c2ce43202287335"
+    },
+    "design-task": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/design-task/SKILL.md",
+      "computedHash": "40adc843777e50022dfc4be8cc4d63f19f2563c1d337cb754b528fe0669d5d90"
+    },
+    "getting-started": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/getting-started/SKILL.md",
+      "computedHash": "23ab46622e300309226ee0ca61b9a5a20d0b321a49f18601ac300def31589c19"
+    },
+    "langfuse": {
+      "source": "langfuse/skills",
+      "commit": "f0bcb13088b490c04b3f4870bace17f6d57b199c",
+      "sourceType": "github",
+      "skillPath": "skills/langfuse/SKILL.md",
+      "computedHash": "a35653229c8f110a1c950bce100edaf84870b8037dd59c940031e8434b9e15f0"
+    },
+    "test-crewai-project": {
+      "source": "crewAIInc/skills",
+      "commit": "bebb6e8fc10bb8d07961969fb7bfd7d6091b421a",
+      "sourceType": "github",
+      "skillPath": "skills/test-crewai-project/SKILL.md",
+      "computedHash": "208c0d1dac12c6448eeb2f79ef332ca7cb3bc3cf444c8bee8f49df41e8fb37d5"
+    }
+  }
+}
