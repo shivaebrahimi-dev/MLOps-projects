@@ -31,7 +31,11 @@ All 8 traces share the Langfuse session id `eval-20261122-191648-447fd1`, so in 
 | q8 | `356237b0128d105f4e66648a57d4430c` |
 
 The trace ids are only identifiers: opening them requires access to the author's Langfuse project. The screenshot
-[langfuse-trace-screenshot.png](langfuse-trace-screenshot.png) shows one trace as it appears in the Langfuse UI.
+[langfuse-trace-screenshot.png](langfuse-trace-screenshot.png) shows the q8 trace (`356237b0128d105f4e66648a57d4430c`)
+in the Langfuse UI:
+- the tree of agents, tasks, tool, retriever, embedding, and guardrail
+- the selected `gpt-4o-mini-2024-07-18` generation, with 2k tokens and $0.000265
+- the evidence-only instructions sent to the Answer/Verifier agent
 
 Note on cost: OpenAI caches repeated prompt prefixes automatically, and cached input tokens are cheaper. Two runs
 with the same token count can therefore report different costs (for example $0.0025 vs $0.0032 for the two

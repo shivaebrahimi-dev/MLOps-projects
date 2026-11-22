@@ -170,7 +170,11 @@ Langfuse client.
 - CrewAI's own anonymous telemetry and its cloud-tracing prompt are switched off (`CREWAI_DISABLE_TELEMETRY`,
   `Crew(tracing=False)`), and so is Chroma's telemetry.
 
-A real trace from this project is in [reports/](reports/) (see [Deliverables checklist](#deliverables-checklist)).
+A real trace from this project (evaluation question q8, trace `356237b0128d105f4e66648a57d4430c`):
+
+![Langfuse trace of one question: rag-question root, CrewAI crew, both agents, the search tool with the retriever and embedding, two gpt-4o-mini generations with tokens and cost, and the citation guardrail](reports/langfuse-trace-screenshot.png)
+
+More trace ids are listed in [reports/langfuse-traces.md](reports/langfuse-traces.md).
 
 ## Keeping credentials out of source control
 
@@ -410,6 +414,6 @@ agentic-rag-mlops/
 | 4. `.env.example` with variable names only | [.env.example](.env.example) |
 | 5. Automated tests and results | [tests/](tests/), [reports/test-results.txt](reports/test-results.txt) |
 | 6. Evaluation dataset and expected-answer rubric | [evaluation/](evaluation/) |
-| 7. Langfuse trace id or screenshot | [reports/](reports/) |
+| 7. Langfuse trace id or screenshot | [reports/langfuse-trace-screenshot.png](reports/langfuse-trace-screenshot.png), [reports/langfuse-traces.md](reports/langfuse-traces.md) |
 | 8. User-invocable `rag-evaluation-report` skill | [.agents/skills/rag-evaluation-report/SKILL.md](.agents/skills/rag-evaluation-report/SKILL.md) |
 | 9. Evaluation report produced by invoking the skill | [reports/rag-evaluation-report.md](reports/rag-evaluation-report.md) |
