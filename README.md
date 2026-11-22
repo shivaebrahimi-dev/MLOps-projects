@@ -6,6 +6,7 @@ Assignments for the course *MLOps for Predictive Modeling* (McGill University).
 |---|---|
 | [fashion-mnist-mlops](fashion-mnist-mlops/) | Train, track, store and serve a Fashion-MNIST classifier: LeNet-5 in PyTorch, MLflow tracking, MinIO model storage, a training-complete webhook, and a FastAPI + Streamlit prediction stack, all run with Docker Compose |
 | [zeroshot-textclassification-mlops](zeroshot-textclassification-mlops/) | Classify text into labels chosen at request time, without training a model: Hugging Face zero-shot models, Streamlit admin and classification pages, and JSON results stored in MinIO, built spec-first with Spec Kit |
+| [evaluation-metrics](evaluation-metrics/) | Presentation (PowerPoint and PDF): evaluation metrics across statistical ML, deep learning, generative AI, software engineering and DevOps/MLOps, including automated vs human vs LLM-as-a-Judge evaluation |
 
 Each project is self-contained. Open its folder and follow its README; for example:
 
