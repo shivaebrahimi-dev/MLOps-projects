@@ -82,18 +82,18 @@ implementation task in each story.
 
 **Independent Test**: `pytest tests/test_observability.py`; manual M8–M10 (needs keys).
 
-- [ ] T026 [P] [US4] Tests in `tests/test_observability.py`: tracing off without keys; `NoopTracer` works with the crew; a fake Langfuse client receives the root observation with session id, request id, and no secrets; errors recorded with level ERROR
-- [ ] T027 [US4] Implement `LangfuseTracer` and `init_tracing()` in `app/observability.py`: Langfuse client, `auth_check`, CrewAI and OpenAI instrumentors (once), `question_trace` with `propagate_attributes`, `retriever` and `guardrail` observations, trace id and URL, flush (FR-015 to FR-019)
-- [ ] T028 [US4] Implement `app/services.py` wiring (settings → embedder, knowledge base, tracer, LLM factory; telemetry env vars)
+- [x] T026 [P] [US4] Tests in `tests/test_observability.py`: tracing off without keys; `NoopTracer` works with the crew; a fake Langfuse client receives the root observation with session id, request id, and no secrets; errors recorded with level ERROR
+- [x] T027 [US4] Implement `LangfuseTracer` and `init_tracing()` in `app/observability.py`: Langfuse client, `auth_check`, CrewAI and OpenAI instrumentors (once), `question_trace` with `propagate_attributes`, `retriever` and `guardrail` observations, trace id and URL, flush (FR-015 to FR-019)
+- [x] T028 [US4] Implement `app/services.py` wiring (settings → embedder, knowledge base, tracer, LLM factory; telemetry env vars)
 - [ ] T029 [US4] Add `tests/test_live.py` (marked `live`): one real question with OpenAI and Langfuse, assert a trace id is returned
 
 ## Phase 7: UI for US1–US4
 
 **Goal**: The Streamlit two-tab UI in [contracts/ui.md](contracts/ui.md).
 
-- [ ] T030 [US1] Knowledge tab in `app/ui.py`: uploader, Index button, results table, summary, knowledge base panel, clear with confirmation
-- [ ] T031 [US2] Ask tab in `app/ui.py`: empty-knowledge notice, question input, status box, badge, answer, missing evidence, source expanders, run details with trace link
-- [ ] T032 [US4] Header tracing badge and per-session UUID `session_id` in `app/ui.py`
+- [x] T030 [US1] Knowledge tab in `app/ui.py`: uploader, Index button, results table, summary, knowledge base panel, clear with confirmation
+- [x] T031 [US2] Ask tab in `app/ui.py`: empty-knowledge notice, question input, status box, badge, answer, missing evidence, source expanders, run details with trace link
+- [x] T032 [US4] Header tracing badge and per-session UUID `session_id` in `app/ui.py`
 - [ ] T033 Run manual scenarios M1–M10 and note the results for the README
 
 ## Phase 8: Sample knowledge and evaluation dataset (supports US5)

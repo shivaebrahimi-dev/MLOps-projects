@@ -6,6 +6,7 @@ Secrets are `SecretStr`, so they never appear in `repr()`, logs, or tracebacks.
 
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from pathlib import Path
 
@@ -76,4 +77,7 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
+    """Settings for the app. `RAG_IGNORE_ENV_FILE=1` skips `.env` (used by the UI test)."""
+    if os.environ.get("RAG_IGNORE_ENV_FILE") == "1":
+        return Settings(_env_file=None)
     return Settings()
