@@ -94,7 +94,7 @@ implementation task in each story.
 - [x] T030 [US1] Knowledge tab in `app/ui.py`: uploader, Index button, results table, summary, knowledge base panel, clear with confirmation
 - [x] T031 [US2] Ask tab in `app/ui.py`: empty-knowledge notice, question input, status box, badge, answer, missing evidence, source expanders, run details with trace link
 - [x] T032 [US4] Header tracing badge and per-session UUID `session_id` in `app/ui.py`
-- [ ] T033 Run manual scenarios M1–M10 and note the results for the README
+- [x] T033 Run manual scenarios M1–M10 and note the results for the README
 
 ## Phase 8: Sample knowledge and evaluation dataset (supports US5)
 

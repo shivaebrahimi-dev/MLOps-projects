@@ -272,6 +272,12 @@ Run these with the UI (`uv run streamlit run app/ui.py`). The full table is in
 | M9 | Set `LANGFUSE_ENABLED=false`, restart, and ask again | Works; the caption says "Langfuse: off" |
 | M10 | Set an invalid `OPENAI_API_KEY`, restart, and ask | A clear error in the UI; with tracing on, the trace has level ERROR |
 
+**Manual run on 2026-11-22 (Windows 11, gpt-4o-mini, Langfuse Cloud US).**
+- M1 and M4: answered "fashion-minst-bucket [fashion-mnist-pipeline.md#4]" (score 0.58) in 5.0 s.
+- M6: answered "I could not find this in the uploaded knowledge." with "No passage reached the relevance threshold" in 3.8 s.
+- M8: confirmed in Langfuse (see the screenshot above).
+- The other scenarios are covered by the automated tests ([tests/](tests/)) and the evaluation run.
+
 ## Evaluation and the evaluation report
 
 **Dataset.**
