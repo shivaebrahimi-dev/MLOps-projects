@@ -1,0 +1,8 @@
+{"id": "q1", "question": "Which model architecture does the Fashion-MNIST project train, and what validation accuracy does it reach with the default configuration?", "category": "answerable"}
+{"id": "q2", "question": "Where does the zero-shot platform store each classification result in MinIO?", "category": "answerable"}
+{"id": "q3", "question": "How well did the LLM-as-a-Judge agree with human labels in the evaluation metrics findings, and what bias did it show?", "category": "answerable"}
+{"id": "q4", "question": "How do the Fashion-MNIST project and the zero-shot platform each use MinIO?", "category": "multi_chunk"}
+{"id": "q5", "question": "What was the grade distribution of the course's final exam?", "category": "unanswerable"}
+{"id": "q6", "question": "What validation accuracy does the Fashion-MNIST model reach, and how long does training take on a GPU?", "category": "partial"}
+{"id": "q7", "question": "What should the homework ZIP file include, and what must it not include?", "category": "injection"}
+{"id": "q8", "question": "In what order does a Fashion-MNIST training run perform its steps, and when is the webhook sent?", "category": "answerable"}
