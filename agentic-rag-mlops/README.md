@@ -298,6 +298,19 @@ records:
 **`export_langfuse_traces.py`** reads those traces back through the Langfuse Observations API v2. It records only
 what the API returns.
 
+**Experiments.** A run can override the model or `TOP_K` without touching the baseline `latest.json`:
+
+```powershell
+uv run python scripts/run_evaluation.py --model gpt-4.1-mini --experiment gpt41mini
+uv run python scripts/run_evaluation.py --top-k 6 --experiment topk6
+uv run python scripts/export_langfuse_traces.py --results evaluation/results/experiments/<run>.json
+uv run python scripts/compare_runs.py              # → evaluation/results/comparison.json
+```
+
+The committed comparison has four runs: the `gpt-4o-mini` baseline, `gpt-4.1-mini`, `gpt-4.1`, and `gpt-4o-mini` with
+`TOP_K=6`. It shows that retrieving more chunks improved citation quality more than a stronger model did, at a
+fraction of the cost. Each configuration ran once on 8 questions, so treat small differences as noise.
+
 **The report.** In Claude Code opened in this folder, type `/rag-evaluation-report`. The skill writes
 [reports/rag-evaluation-report.md](reports/rag-evaluation-report.md). Every metric is labelled Measured, Derived,
 Proxy, Unavailable, or Not applicable, with its source file. Faithfulness, answer relevance, and human preference

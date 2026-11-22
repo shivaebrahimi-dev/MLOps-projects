@@ -140,6 +140,12 @@ def aggregate(traces: list[dict[str, Any]]) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Export Langfuse trace summaries.")
     parser.add_argument("--trace-id", nargs="*", help="trace ids (default: latest eval run)")
+    parser.add_argument(
+        "--results",
+        type=Path,
+        default=RESULTS,
+        help="evaluation results file to read trace ids from",
+    )
     parser.add_argument("--wait", type=float, default=60, help="seconds to wait for ingestion")
     args = parser.parse_args()
 
@@ -151,10 +157,10 @@ def main() -> int:
     run_id = None
     trace_ids = args.trace_id or []
     if not trace_ids:
-        if not RESULTS.exists():
-            print(f"{RESULTS} not found. Run scripts/run_evaluation.py first, or pass --trace-id.")
+        if not args.results.exists():
+            print(f"{args.results} not found. Run scripts/run_evaluation.py or pass --trace-id.")
             return 2
-        run = json.loads(RESULTS.read_text(encoding="utf-8"))
+        run = json.loads(args.results.read_text(encoding="utf-8"))
         run_id = run["run_id"]
         trace_ids = [i["trace_id"] for i in run["items"] if i.get("trace_id")]
         if not trace_ids:
@@ -216,9 +222,12 @@ def main() -> int:
         "traces": traces,
         "missing": missing,
     }
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
-    print(f"Fetched {len(traces)}/{len(trace_ids)} traces; {len(missing)} missing. Wrote {OUT}")
+    out = OUT
+    if run_id and run_id.startswith("exp-"):
+        out = ROOT / "reports" / "experiments" / f"langfuse_{run_id}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
+    print(f"Fetched {len(traces)}/{len(trace_ids)} traces; {len(missing)} missing. Wrote {out}")
     return 0
 
 

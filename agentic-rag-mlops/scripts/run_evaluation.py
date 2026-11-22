@@ -45,16 +45,29 @@ def print_row(row: dict) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the RAG evaluation dataset.")
     parser.add_argument("--only", nargs="*", help="question ids to run (default: all)")
+    parser.add_argument("--model", help="override OPENAI_MODEL for this run")
+    parser.add_argument("--top-k", type=int, help="override TOP_K for this run")
+    parser.add_argument(
+        "--experiment",
+        metavar="LABEL",
+        help="save to evaluation/results/experiments/ and leave latest.json (the baseline) alone",
+    )
     args = parser.parse_args()
 
     tmp = Path(tempfile.mkdtemp(prefix="rag-eval-"))
-    settings = get_settings().model_copy(update={"chroma_dir": tmp})
+    overrides: dict = {"chroma_dir": tmp}
+    if args.model:
+        overrides["openai_model"] = args.model
+    if args.top_k:
+        overrides["top_k"] = args.top_k
+    settings = get_settings().model_copy(update=overrides)
     svc = build_services(settings)
     if svc.llm_factory is None:
         print("OPENAI_API_KEY is not set in .env; the evaluation needs the real model.")
         return 2
 
-    run_id = f"eval-{datetime.now(UTC):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:6]}"
+    prefix = f"exp-{args.experiment}" if args.experiment else "eval"
+    run_id = f"{prefix}-{datetime.now(UTC):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:6]}"
     print(f"Run {run_id} | {svc.tracer.description}")
 
     files = [(p.name, p.read_bytes()) for p in sorted(SAMPLES.iterdir()) if p.is_file()]
@@ -86,6 +99,7 @@ def main() -> int:
 
     report = {
         "run_id": run_id,
+        "experiment": args.experiment,
         "started_at": started_at,
         "finished_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "app_version": APP_VERSION,
@@ -111,10 +125,16 @@ def main() -> int:
         "score_distribution": ev.score_distribution(rows),
         "items": rows,
     }
-    RESULTS.mkdir(parents=True, exist_ok=True)
     text = json.dumps(report, indent=2, ensure_ascii=False)
-    (RESULTS / "latest.json").write_text(text, encoding="utf-8")
-    (RESULTS / f"{run_id}.json").write_text(text, encoding="utf-8")
+    if args.experiment:
+        out = RESULTS / "experiments" / f"{run_id}.json"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(text, encoding="utf-8")
+    else:
+        RESULTS.mkdir(parents=True, exist_ok=True)
+        (RESULTS / "latest.json").write_text(text, encoding="utf-8")
+        out = RESULTS / f"{run_id}.json"
+        out.write_text(text, encoding="utf-8")
 
     s = report["summary"]
     print(
@@ -123,7 +143,7 @@ def main() -> int:
         f"{s['metrics']['citation_correctness']['mean']} | median latency "
         f"{s['latency_s']['median']} s"
     )
-    print(f"Wrote {RESULTS / 'latest.json'}")
+    print(f"Wrote {out}" + ("" if args.experiment else " and latest.json"))
     return 0
 
 

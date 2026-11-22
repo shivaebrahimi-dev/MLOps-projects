@@ -65,6 +65,7 @@ Read these files, relative to the project root. Record in the report which ones 
 | Evaluation dataset | `evaluation/questions.jsonl`, `evaluation/expected_answers.jsonl` | Questions, categories, rubric |
 | Evaluation results | `evaluation/results/latest.json` | All measured quality, latency, and token values |
 | Langfuse trace summaries | `reports/langfuse_traces_summary.json` | Trace completeness, step latency, tokens, cost, errors |
+| Experiments (optional) | `evaluation/results/comparison.json`, `evaluation/results/experiments/*.json`, `reports/experiments/langfuse_*.json` | Baseline vs other models or settings; each row's values are copied from its own run files |
 | Trace evidence | `reports/` (a screenshot or a trace id file, if present) | Proof that a real trace exists |
 | Metric definitions | `specs/001-agentic-rag/contracts/evaluation-dataset.md` | Exact formulas |
 
@@ -196,6 +197,11 @@ privacy). Columns: Metric | Value | n | Status | Source | Notes, or how to colle
 
 ## 6. Results per question
 Table: id | category | expected → actual status | hit@k | citations | points covered | latency | trace id.
+
+## 6b. Experiments (only if comparison.json exists)
+Table copied from comparison.json: configuration, status accuracy, citation correctness and completeness,
+precision@k, latency, tokens, Langfuse cost. Say what changed between runs (model or TOP_K), that each
+configuration ran once on a small dataset, and which differences are smaller than one question (1/n).
 
 ## 7. Langfuse traces
 What the export shows: observation types per trace, completeness, step latency, tokens, cost, errors, missing

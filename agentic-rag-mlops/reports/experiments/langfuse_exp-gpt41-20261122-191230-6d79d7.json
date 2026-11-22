@@ -1,0 +1,653 @@
+{
+  "source": "Langfuse Observations API v2 (langfuse Python SDK 5.2.0)",
+  "langfuse_base_url": "https://us.cloud.langfuse.com",
+  "fetched_at": "2026-11-22T19:13:49+00:00",
+  "evaluation_run_id": "exp-gpt41-20261122-191230-6d79d7",
+  "requested": 8,
+  "aggregate": {
+    "traces": 8,
+    "with_error_level": 0,
+    "with_retriever_observation": 8,
+    "with_guardrail_observation": 8,
+    "with_token_usage": 8,
+    "with_model_name": 8,
+    "latency_s": {
+      "median": 3.006,
+      "max": 3.44
+    },
+    "total_tokens": 16180,
+    "total_cost_usd": 0.03923,
+    "models": [
+      "gpt-4.1-2025-04-14"
+    ]
+  },
+  "traces": [
+    {
+      "trace_id": "c6bd2d7f1e43c9a177237311b2e66bf3",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:32.235000+00:00",
+      "root_latency_s": 3.019,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "RETRIEVER": 1,
+        "TOOL": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 2.064,
+          "max": 1.047
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 5.36,
+          "max": 3.019
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.197,
+          "max": 0.197
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.2,
+          "max": 0.2
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.201,
+          "max": 0.201
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 2.37,
+          "max": 2.37
+        }
+      },
+      "levels": {
+        "DEFAULT": 12
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 2050,
+        "output": 170,
+        "total": 2220,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.00546,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "0c4c6d4738bea980df13a5622f5b379e",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:36.417000+00:00",
+      "root_latency_s": 3.059,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "TOOL": 1,
+        "RETRIEVER": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 2.213,
+          "max": 0.985
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 5.514,
+          "max": 3.059
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.21,
+          "max": 0.21
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.213,
+          "max": 0.213
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.213,
+          "max": 0.213
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 2.479,
+          "max": 2.479
+        }
+      },
+      "levels": {
+        "DEFAULT": 12
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 1987,
+        "output": 158,
+        "total": 2145,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.005238,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "070fbd1ecf94f02d4c33d6df51e368b2",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:39.619000+00:00",
+      "root_latency_s": 2.848,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "TOOL": 1,
+        "RETRIEVER": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 2.007,
+          "max": 0.939
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 5.1,
+          "max": 2.848
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.215,
+          "max": 0.215
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.218,
+          "max": 0.218
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.218,
+          "max": 0.218
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 2.277,
+          "max": 2.277
+        }
+      },
+      "levels": {
+        "DEFAULT": 12
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 2079,
+        "output": 171,
+        "total": 2250,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.005526,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "e50a5ea0cf8f8cf43b1c4686cf98c3fc",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:42.601000+00:00",
+      "root_latency_s": 3.0,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "RETRIEVER": 1,
+        "TOOL": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.001,
+          "max": 0.001
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 2.159,
+          "max": 0.859
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 5.405,
+          "max": 3.0
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.215,
+          "max": 0.215
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.217,
+          "max": 0.217
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.218,
+          "max": 0.218
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 2.427,
+          "max": 2.427
+        }
+      },
+      "levels": {
+        "DEFAULT": 12
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 2071,
+        "output": 118,
+        "total": 2189,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.005086,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "fbfbce66f49c977c5441fc224355ec1c",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:45.753000+00:00",
+      "root_latency_s": 2.315,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "RETRIEVER": 1,
+        "TOOL": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 1.475,
+          "max": 0.543
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 4.024,
+          "max": 2.315
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.202,
+          "max": 0.202
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.204,
+          "max": 0.204
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.206,
+          "max": 0.206
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 1.732,
+          "max": 1.732
+        }
+      },
+      "levels": {
+        "DEFAULT": 10,
+        "WARNING": 2
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 1245,
+        "output": 54,
+        "total": 1299,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.002922,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "d38dff6bced6120b159e59cfbe111b96",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:48.207000+00:00",
+      "root_latency_s": 2.809,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "RETRIEVER": 1,
+        "TOOL": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 1.956,
+          "max": 0.918
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 5.028,
+          "max": 2.809
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.229,
+          "max": 0.229
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.231,
+          "max": 0.231
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.236,
+          "max": 0.236
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 2.241,
+          "max": 2.241
+        }
+      },
+      "levels": {
+        "DEFAULT": 12
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 2046,
+        "output": 128,
+        "total": 2174,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.005116,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "6688bf0595fc695851437a3a58af716e",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:51.157000+00:00",
+      "root_latency_s": 3.013,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "RETRIEVER": 1,
+        "TOOL": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 2.146,
+          "max": 1.0
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 5.441,
+          "max": 3.013
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.25,
+          "max": 0.25
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.253,
+          "max": 0.253
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.254,
+          "max": 0.254
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 2.449,
+          "max": 2.449
+        }
+      },
+      "levels": {
+        "DEFAULT": 10,
+        "WARNING": 2
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 1554,
+        "output": 119,
+        "total": 1673,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.00406,
+      "cost_reported": true
+    },
+    {
+      "trace_id": "ba4e54bcf585147f4daab3511d4336dc",
+      "trace_name": "rag-question",
+      "session_id": "exp-gpt41-20261122-191230-6d79d7",
+      "start_time": "2026-11-22 19:12:54.314000+00:00",
+      "root_latency_s": 3.44,
+      "observation_count": 12,
+      "observations_by_type": {
+        "GUARDRAIL": 1,
+        "GENERATION": 4,
+        "AGENT": 3,
+        "EMBEDDING": 1,
+        "RETRIEVER": 1,
+        "TOOL": 1,
+        "CHAIN": 1
+      },
+      "step_latency_s_by_type": {
+        "GUARDRAIL": {
+          "n": 1,
+          "total": 0.0,
+          "max": 0.0
+        },
+        "GENERATION": {
+          "n": 4,
+          "total": 2.502,
+          "max": 1.327
+        },
+        "AGENT": {
+          "n": 3,
+          "total": 6.276,
+          "max": 3.44
+        },
+        "EMBEDDING": {
+          "n": 1,
+          "total": 0.304,
+          "max": 0.304
+        },
+        "RETRIEVER": {
+          "n": 1,
+          "total": 0.306,
+          "max": 0.306
+        },
+        "TOOL": {
+          "n": 1,
+          "total": 0.307,
+          "max": 0.307
+        },
+        "CHAIN": {
+          "n": 1,
+          "total": 2.861,
+          "max": 2.861
+        }
+      },
+      "levels": {
+        "DEFAULT": 12
+      },
+      "error_messages": [],
+      "has_retriever_observation": true,
+      "has_guardrail_observation": true,
+      "generation_count": 4,
+      "llm_calls_with_usage": 2,
+      "models": [
+        "gpt-4.1-2025-04-14"
+      ],
+      "usage_details": {
+        "prompt_details.audio": 0,
+        "input": 2003,
+        "output": 227,
+        "total": 2230,
+        "input_cached_tokens": 0,
+        "output_reasoning_tokens": 0,
+        "output_audio_tokens": 0
+      },
+      "tokens_reported": true,
+      "model_reported": true,
+      "total_cost_usd": 0.005822,
+      "cost_reported": true
+    }
+  ],
+  "missing": []
+}
