@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AnswerDraft",
+  "description": "Structured output of the Answer/Verifier task. The guardrail also checks every citation against the retrieved chunk ids.",
+  "type": "object",
+  "required": ["status", "answer", "citations"],
+  "additionalProperties": false,
+  "properties": {
+    "status": {"enum": ["answered", "partial", "not_found"]},
+    "answer": {"type": "string", "minLength": 1},
+    "citations": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^.+#[0-9]+$"},
+      "uniqueItems": true
+    },
+    "missing_evidence": {"type": "array", "items": {"type": "string"}, "default": []}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "not_found"}}},
+      "then": {
+        "properties": {
+          "answer": {"const": "I could not find this in the uploaded knowledge."},
+          "citations": {"maxItems": 0}
+        }
+      },
+      "else": {"properties": {"citations": {"minItems": 1}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "partial"}}},
+      "then": {"required": ["missing_evidence"], "properties": {"missing_evidence": {"minItems": 1}}}
+    }
+  ]
+}

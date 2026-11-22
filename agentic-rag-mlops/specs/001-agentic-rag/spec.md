@@ -252,7 +252,7 @@ traced to a results file.
   refers to a retrieved chunk (citation correctness = 100%).
 - **SC-005**: The unanswerable evaluation question receives the safe response in every run.
 - **SC-006**: Every question asked with tracing on produces exactly one trace containing all required steps.
-- **SC-007**: A typical question is answered in under 30 seconds.
+- **SC-007**: The median end-to-end answer time over the evaluation questions is under 30 seconds.
 - **SC-008**: The automated test suite passes with no network access and no API keys.
 - **SC-009**: The evaluation report contains no metric value that cannot be traced to a results file.
 
