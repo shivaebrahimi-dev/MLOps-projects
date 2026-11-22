@@ -110,8 +110,8 @@ implementation task in each story.
 
 **Independent Test**: the user invokes `/rag-evaluation-report`; every number in the report can be traced to a file.
 
-- [ ] T039 [US5] Write `.agents/skills/rag-evaluation-report/SKILL.md` (frontmatter `name`, `description`, `user-invocable: true`, `disable-model-invocation: true`): inputs, the metric catalogue based on Homework 3, measured/unavailable rules, report template, privacy rules (FR-023)
-- [ ] T040 [US5] Mirror the skill to `.claude/skills/rag-evaluation-report/SKILL.md` and add a test that the frontmatter is the same in both and has the required values
+- [x] T039 [US5] Write `.agents/skills/rag-evaluation-report/SKILL.md` (frontmatter `name`, `description`, `user-invocable: true`, `disable-model-invocation: true`): inputs, the metric catalogue based on Homework 3, measured/unavailable rules, report template, privacy rules (FR-023)
+- [x] T040 [US5] Mirror the skill to `.claude/skills/rag-evaluation-report/SKILL.md` and add a test that the frontmatter is the same in both and has the required values
 - [ ] T041 [US5] The user runs the evaluation and invokes the skill; commit `reports/rag-evaluation-report.md`
 
 ## Phase 10: Polish and submission

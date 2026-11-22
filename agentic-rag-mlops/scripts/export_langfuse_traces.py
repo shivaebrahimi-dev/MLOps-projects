@@ -78,6 +78,11 @@ def summarise_trace(trace_id: str, observations: list[Any]) -> dict[str, Any]:
                 usage[key] += value
     costs = [_get(o, "total_cost") for o in observations if _get(o, "total_cost") is not None]
     names = Counter(str(_get(o, "name")) for o in observations)
+    step_latency: dict[str, list[float]] = {}
+    for o in observations:
+        seconds = _seconds(o)
+        if seconds is not None:
+            step_latency.setdefault(str(_get(o, "type")), []).append(seconds)
     return {
         "trace_id": trace_id,
         "trace_name": _get(root, "trace_name") or _get(root, "name"),
@@ -86,6 +91,10 @@ def summarise_trace(trace_id: str, observations: list[Any]) -> dict[str, Any]:
         "root_latency_s": round(_seconds(root), 3) if root and _seconds(root) is not None else None,
         "observation_count": len(observations),
         "observations_by_type": dict(types),
+        "step_latency_s_by_type": {
+            t: {"n": len(v), "total": round(sum(v), 3), "max": round(max(v), 3)}
+            for t, v in step_latency.items()
+        },
         "levels": dict(levels),
         "error_messages": [
             _get(o, "status_message") for o in observations if str(_get(o, "level")) == "ERROR"

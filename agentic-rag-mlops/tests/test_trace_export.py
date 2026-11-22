@@ -64,6 +64,7 @@ def test_summary_counts_types_tokens_and_cost():
     assert s["tokens_reported"] and s["model_reported"] and s["models"] == ["gpt-4o-mini"]
     assert s["total_cost_usd"] == 0.00021
     assert s["has_retriever_observation"] and s["has_guardrail_observation"]
+    assert s["step_latency_s_by_type"]["GENERATION"] == {"n": 2, "total": 2.0, "max": 1.0}
 
 
 def test_missing_values_stay_missing():
